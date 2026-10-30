@@ -1,0 +1,19 @@
+<%#
+  A form that POSTs with its CSRF field and one submit button, for actions that need no fields (Share,
+  Restore, Revoke, Enable account, the inline confirm's Yes, ...).
+  Included by partials/gallery-share-panel.ejs, partials/rows/trash.ejs, partials/rows/invite.ejs,
+  partials/admin/user-profile.ejs and partials/confirm-panel.ejs.
+  Locals: post (one object, so nothing is inherited from the including page):
+    action: POST URL
+    label: button text
+    btn: the button's classes after .btn, e.g. 'btn-quiet btn-sm'
+    icon: optional Font Awesome class string shown before the label
+    formClass: optional class attribute of the form
+    confirmHide: optional boolean; marks the form data-confirm-hide (hidden while an inline confirm in its
+      [data-confirm] group is open, public/js/inline-confirm.js)
+  csrfToken (chrome local), for partials/csrf-field.ejs
+-%>
+<form action="<%= post.action %>" method="post"<% if (post.formClass) { %> class="<%= post.formClass %>"<% } %><% if (post.confirmHide) { %> data-confirm-hide<% } %>>
+  <%- include('csrf-field') %>
+  <button type="submit" class="btn <%= post.btn %>"><% if (post.icon) { %><%- include('icon', { name: post.icon }) %> <% } %><%= post.label %></button>
+</form>

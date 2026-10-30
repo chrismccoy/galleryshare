@@ -1,0 +1,44 @@
+<%#
+  Dashboard overview (signed-in shell): the user's counts (galleries, images, storage, live share links) and
+  their six most recent galleries, each with the Shared pill when it has a live link, and their five latest My activity
+  entries (partials/recent-activity.ejs).
+  Rendered by GET /dashboard (routes/pages/dashboard.js).
+  Locals:
+    title, user (chrome locals)
+    tiles: [{ stat, label, value, help, tone }] for partials/kpi-card.ejs
+    recent: up to 6 gallery rows [{ id, title, imageCount, thumbImageId, shared }] (routes/view/gallery-rows.js)
+    activity: up to 5 activity rows (routes/view/activity-page.js toActivityRow)
+    paths, pathTo: app.locals (config/urls.js), for links
+-%>
+<div class="mb-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <% tiles.forEach(function (tile) { %>
+    <%- include('../partials/kpi-card', tile) %>
+  <% }); %>
+</div>
+<section data-widget="galleries" class="card">
+  <div class="card-head">
+    <h2>Recent galleries</h2>
+    <a href="<%= paths.galleries %>" class="ml-auto text-xs text-brand-600 hover:underline">All galleries</a>
+  </div>
+  <div class="card-body">
+    <% if (recent.length) { %>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <% recent.forEach(function (item) { %>
+          <li data-gallery-card>
+            <a href="<%= pathTo.gallery(item.id) %>" class="flex items-center gap-3 rounded-lg border border-slate-200 p-3 hover:bg-slate-50">
+              <%- include('../partials/gallery-cover', { cover: { item, size: 'h-16 w-16 shrink-0' } }) %>
+              <span class="min-w-0">
+                <span class="block truncate font-medium text-slate-800"><%= item.title %></span>
+                <span class="block text-xs text-slate-500"><%= plural(item.imageCount, 'image') %></span>
+                <% if (item.shared) { %><%- include('../partials/shared-pill', { pill: { extra: 'mt-1' } }) %><% } %>
+              </span>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <%- include('../partials/empty-state', { empty: { icon: 'fa-solid fa-images', text: 'No galleries yet.', link: { href: paths.newGallery, label: 'Add gallery' } } }) %>
+    <% } %>
+  </div>
+</section>
+<%- include('../partials/recent-activity', { recent: { rows: activity, href: paths.activity, admin: false } }) %>

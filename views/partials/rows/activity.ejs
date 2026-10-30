@@ -1,0 +1,13 @@
+<%#
+  One event in the Activity tables.
+  Rendered through partials/data-table.ejs by pages/activity.ejs and partials/recent-activity.ejs.
+  Locals: item: { when, who, area: { text, tone }, what, details, from }; admin: true adds the From cell.
+-%>
+<tr>
+  <td class="whitespace-nowrap text-slate-500"><%= item.when %></td>
+  <td class="whitespace-nowrap"><%= item.who %></td>
+  <td><%- include('../pill', { pill: item.area }) %></td>
+  <td class="whitespace-nowrap font-medium text-slate-900"><%= item.what %></td>
+  <td><%= item.details %></td>
+  <% if (admin) { %><td class="whitespace-nowrap text-slate-500"><%= item.from %></td><% } %>
+</tr>

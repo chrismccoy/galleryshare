@@ -1,0 +1,228 @@
+@import './share-gallery.css';
+@import './share-themes.css';
+
+@tailwind base;
+@tailwind components;
+
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-transparent px-3.5 py-1.5 text-sm font-medium;
+}
+.btn-primary {
+  @apply bg-brand-600 text-white hover:bg-brand-700;
+}
+.btn-outline {
+  @apply border-brand-600 bg-white text-brand-700 hover:bg-slate-50;
+}
+.btn-quiet {
+  @apply border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900;
+}
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+.btn-dark {
+  @apply bg-slate-900 text-white hover:bg-slate-700;
+}
+.btn-sm {
+  @apply gap-1.5 rounded-md px-2.5 py-1 text-xs;
+}
+.btn:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.card {
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+}
+.card-head {
+  @apply flex items-center gap-2.5 border-b border-slate-200 px-4 py-3 text-ui font-semibold text-slate-900;
+}
+.card-body {
+  @apply p-4;
+}
+
+.pill {
+  @apply inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-meta font-semibold tabular-nums text-slate-600;
+}
+.pill-green {
+  @apply bg-green-100 text-green-700;
+}
+.pill-amber {
+  @apply bg-amber-100 text-amber-700;
+}
+.pill-red {
+  @apply bg-red-100 text-red-700;
+}
+.pill-sky {
+  @apply bg-sky-100 text-sky-700;
+}
+.chip {
+  @apply inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2 py-0.5 text-meta text-slate-500;
+}
+
+.filter-bar {
+  @apply mb-4 flex flex-wrap items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm;
+}
+
+.kpi-label {
+  @apply text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+}
+.kpi-value {
+  @apply mt-2.5 text-[27px] font-semibold leading-tight tracking-tight tabular-nums text-slate-900;
+}
+
+.field-label {
+  @apply mb-1.5 block text-ui font-medium text-slate-700;
+}
+.field-input {
+  @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none;
+}
+.save-bar {
+  @apply fixed inset-x-0 bottom-0 z-20 flex items-center justify-end gap-3 border-t border-slate-200 bg-white/90 px-4 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur sm:px-6 lg:left-sidebar lg:px-8;
+}
+.save-bar-count {
+  @apply flex items-center gap-1.5 text-sm text-slate-600 before:h-2 before:w-2 before:rounded-full before:bg-amber-500 before:content-[''];
+}
+.dialog {
+  @apply m-auto w-[min(28rem,calc(100%-2rem))] rounded-xl border border-slate-200 bg-white p-5 shadow-xl;
+}
+.dialog::backdrop {
+  @apply bg-slate-900/40;
+}
+body:has(.save-bar:not([hidden])) main {
+  @apply pb-24;
+}
+
+.segmented {
+  @apply inline-flex overflow-hidden rounded-lg border border-slate-300 bg-white;
+}
+.segmented-option {
+  @apply relative cursor-pointer border-l border-slate-300 first:border-l-0;
+}
+.segmented-option span {
+  @apply block px-3.5 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50;
+}
+.segmented-option input:checked + span {
+  @apply bg-brand-600 text-white hover:bg-brand-600;
+}
+.segmented-option input:focus-visible + span {
+  @apply outline outline-2 -outline-offset-2 outline-brand-500;
+}
+.segmented-wrap {
+  @apply flex flex-wrap gap-1.5 overflow-visible border-0 bg-transparent;
+}
+.segmented-wrap .segmented-option {
+  @apply overflow-hidden rounded-lg border border-slate-300 first:border-l;
+}
+
+.help {
+  @apply mt-1.5 text-xs text-slate-500;
+}
+
+.empty {
+  @apply rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center;
+}
+.card-empty {
+  @apply p-6 text-center text-sm text-slate-400;
+}
+
+.data-table {
+  @apply w-full border-collapse text-left text-[13.5px];
+}
+.data-table thead th {
+  @apply whitespace-nowrap border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+}
+.data-table tbody td,
+.data-table tbody th {
+  @apply border-b border-slate-100 px-4 py-3 align-middle text-slate-700;
+}
+.data-table tbody th {
+  @apply whitespace-nowrap text-left font-normal;
+}
+.data-table tbody tr:last-child td,
+.data-table tbody tr:last-child th {
+  @apply border-b-0;
+}
+.data-table tbody tr:hover td,
+.data-table tbody tr:hover th {
+  @apply bg-slate-50;
+}
+
+.toggle-row {
+  @apply flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-3;
+}
+
+.notice {
+  @apply mb-4.5 flex items-start gap-2.5 rounded-lg border px-3.5 py-[11px] text-ui;
+}
+.notice i {
+  @apply mt-0.5;
+}
+.notice-warn {
+  @apply border-amber-200 bg-amber-50 text-amber-700;
+}
+.notice-error {
+  @apply border-red-200 bg-red-50 text-red-700;
+}
+.notice-ok {
+  @apply border-green-200 bg-green-50 text-green-700;
+}
+.notice-info {
+  @apply border-indigo-200 bg-indigo-50 text-indigo-700;
+}
+.notice-dismiss {
+  @apply -my-1 -mr-1.5 ml-auto flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md opacity-70 hover:bg-black/5 hover:opacity-100;
+}
+.notice-dismiss i {
+  @apply mt-0;
+}
+
+.pub-header-sticky {
+  @apply sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur-sm;
+}
+.pub-main {
+  @apply mx-auto max-w-public px-5 py-7 pb-14;
+}
+.owner-only {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-dashed border-slate-300 bg-white px-2.5 py-0.5 text-meta text-slate-500;
+}
+
+.pub-centre {
+  @apply flex min-h-[60vh] items-center justify-center;
+}
+.panel {
+  @apply mx-auto w-full max-w-[380px] rounded-2xl border border-slate-200 bg-white p-[30px];
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 8px 24px rgba(15, 23, 42, 0.06);
+}
+.panel-head {
+  @apply mb-[22px] text-center;
+}
+
+.brand-mark {
+  @apply grid place-items-center bg-gradient-to-br from-brand-500 to-brand-700 text-white;
+}
+.brand-mark-sm {
+  @apply h-[26px] w-[26px] rounded-lg text-xs;
+}
+.brand-mark-md {
+  @apply h-7 w-7 rounded-lg text-ui;
+}
+.brand-mark-lg {
+  @apply mx-auto mb-3 h-11 w-11 rounded-xl text-[17px];
+}
+.state-mark {
+  @apply mx-auto mb-3.5 grid h-[52px] w-[52px] place-items-center rounded-2xl text-xl;
+}
+.state-slate {
+  @apply bg-slate-100 text-slate-500;
+}
+.state-amber {
+  @apply bg-amber-50 text-amber-500;
+}
+.state-red {
+  @apply bg-red-50 text-red-600;
+}
+
+
+@tailwind utilities;

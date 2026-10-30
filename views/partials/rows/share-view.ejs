@@ -1,0 +1,6 @@
+<%#
+  One recorded open of a share link: time, kind (Page or ZIP), IP and user-agent.
+  Rendered through partials/data-table.ejs by pages/admin/share.ejs.
+  Locals: item: { when, kind, ip, userAgent } (user-agent already shortened).
+-%>
+<tr data-view-row><td><%= item.when %></td><td><%= item.kind %></td><td><%= item.ip %></td><td class="break-all"><%= item.userAgent %></td></tr>

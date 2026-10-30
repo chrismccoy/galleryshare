@@ -1,0 +1,51 @@
+<%#
+  The lightbox viewer (hidden until opened): counter, title, Copy image link (optional), Save, Close, previous/next,
+  the large image, the caption, a key hint and the thumbnail strip. public/js/lightbox.js drives it and fills the strip from the page's
+  figure[data-shot] cards (partials/share-card.ejs).
+  Included by pages/share.ejs, and rendered with ejs.renderFile by scripts/build-screenshot-gallery.js for the
+  screenshot gallery, so both pages share this markup.
+  Locals (one object, so nothing is inherited from the including page):
+    lightbox: { itemLabel, thumbTop, copyLink }
+      itemLabel: what one item is called ('Image' or 'Screenshot'): the dialog's label and the strip buttons'
+        "<itemLabel> <n>" (data-item-label)
+      thumbTop: optional boolean; crops the strip thumbnails from the top (data-thumb-top), for screenshots
+      copyLink: optional boolean; adds "Copy image link" (#lb-copy), which copies the full address of the image shown
+        (public/js/copy-link.js reads data-copy-link, which public/js/lightbox.js keeps up to date)
+-%>
+<div id="lightbox" hidden class="fixed inset-0 z-[999] flex flex-col items-center justify-center gap-2 bg-black/[0.92] p-2 backdrop-blur" role="dialog" aria-modal="true" aria-label="<%= lightbox.itemLabel %>" data-item-label="<%= lightbox.itemLabel %>"<% if (lightbox.thumbTop) { %> data-thumb-top<% } %>>
+  <div class="flex w-full max-w-lightbox flex-shrink-0 items-center justify-between">
+    <div class="flex min-w-0 items-center gap-[10px]">
+      <span id="lb-counter" class="text-sm font-bold text-white"></span>
+      <span id="lb-title" class="truncate text-xs text-white/50"></span>
+    </div>
+    <div class="flex items-center gap-2">
+      <% if (lightbox.copyLink) { %>
+        <button type="button" id="lb-copy" data-copy-link="" class="lb-btn" title="Copy the image's address, to embed it on a forum or elsewhere">
+          <%- include('icon', { name: 'fa-solid fa-link' }) %> <span data-copy-label>Copy image link</span>
+        </button>
+      <% } %>
+      <a id="lb-save" download href="#" class="lb-btn">
+        <%- include('icon', { name: 'fa-solid fa-download' }) %> Save
+      </a>
+      <button type="button" id="lb-close" aria-label="Close" class="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.08] text-base text-white/60 transition-all hover:bg-white/[0.15] hover:text-white">
+        <%- include('icon', { name: 'fa-solid fa-xmark' }) %>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex w-full max-w-lightbox flex-1 items-center justify-center gap-4 overflow-hidden">
+    <button type="button" id="lb-prev" aria-label="Previous <%= lightbox.itemLabel.toLowerCase() %>" class="lb-nav">
+      <%- include('icon', { name: 'fa-solid fa-chevron-left' }) %>
+    </button>
+    <div class="flex max-h-[65vh] flex-1 items-center justify-center overflow-hidden">
+      <img id="lb-image" src="" alt="" class="max-h-[65vh] max-w-full rounded-2xl border border-white/[0.08] object-contain shadow-[0_20px_60px_rgba(0,0,0,0.6)] transition-opacity max-[600px]:max-h-[55vh]" />
+    </div>
+    <button type="button" id="lb-next" aria-label="Next <%= lightbox.itemLabel.toLowerCase() %>" class="lb-nav">
+      <%- include('icon', { name: 'fa-solid fa-chevron-right' }) %>
+    </button>
+  </div>
+
+  <p id="lb-caption" class="max-w-[600px] text-center text-[13px] text-white/70"></p>
+  <p class="text-center text-[11px] text-white/30 max-[600px]:hidden">&larr; &rarr; to move &nbsp;&middot;&nbsp; Esc to close</p>
+  <div id="lb-strip" class="flex max-w-lightbox gap-2 overflow-x-auto py-1 [scrollbar-color:rgba(255,255,255,0.2)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-[2px] [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar]:h-1 max-[600px]:hidden"></div>
+</div>

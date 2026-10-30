@@ -1,0 +1,13 @@
+<%#
+  One row of the admin users list: name, email, role, the Active/Disabled pill, join date and Manage.
+  Rendered through partials/data-table.ejs by pages/admin/users.ejs.
+  Locals: item: { id, name, email, role, status: { text, tone }, joined }; pathTo (app locals).
+-%>
+<tr>
+  <td><%= item.name %></td>
+  <td><%= item.email %></td>
+  <td class="capitalize"><%= item.role %></td>
+  <td><%- include('../pill', { pill: item.status }) %></td>
+  <td><%= item.joined %></td>
+  <td class="text-right"><a href="<%= pathTo.adminUser(item.id) %>" class="btn btn-primary btn-sm">Manage</a></td>
+</tr>

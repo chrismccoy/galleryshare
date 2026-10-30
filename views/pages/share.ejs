@@ -1,0 +1,25 @@
+<%#
+  A shared gallery with two or more images (public layout, wide variant), in the screenshot-gallery look: heading, a
+  card grid (partials/share-card.ejs: thumbnail, title, caption, hover zoom) and the lightbox (partials/lightbox.ejs)
+  with previous/next, arrow keys, Esc, a thumbnail strip, a counter, the caption and Save (the web copy, named
+  <public_name>.webp). The screenshot gallery uses the same two partials and script.
+  The lightbox is driven by public/js/lightbox.js, and its "Copy image link" by public/js/copy-link.js (the route passes
+  scripts: ['lightbox', 'copy-link']); without JavaScript each
+  card still opens the web copy in a new tab.
+  Rendered by GET /s/:token (routes/pages/share.js). Shows nothing about the owner.
+  Locals:
+    title, meta: page chrome (meta carries the generic title and Open Graph title)
+    gallery, zipUrl: for partials/share-header.ejs
+    theme: the share theme key (domain/share-themes.js); the grid is wrapped by partials/share-themes/<shareThemePartial(theme)>.ejs
+    count: the photo count text the themes show, e.g. '12 photos'
+    view: the image view (domain/image-views.js): the lightbox is included only for 'lightbox'
+    images: [{ title, caption, position, thumbUrl, webUrl, download }] in gallery order
+    showText: whether the cards show the title and caption under the thumbnail (SHARE_GRID_TEXT or its Settings
+      override); the lightbox shows them either way
+-%>
+<% const grid = include('../partials/share-grid', { grid: { images, showText, view } }); %>
+<%- include('../partials/share-themes/' + shareThemePartial(theme), { shell: { theme, gallery, zipUrl, count, body: grid } }) %>
+
+<% if (view === 'lightbox') { %>
+<%- include('../partials/lightbox', { lightbox: { itemLabel: 'Image', copyLink: true } }) %>
+<% } %>

@@ -1,0 +1,27 @@
+<%#
+  My galleries: the user's own galleries, newest first, with "Older galleries" paging (signed-in shell).
+  Rendered by GET /dashboard/galleries (routes/pages/my-galleries.js).
+  Locals:
+    title (chrome local)
+    rows: [{ id, title, imageCount, size, created, thumbImageId, shared }] (routes/view/gallery-rows.js)
+    olderUrl: URL of the next older page, or null
+    notice, noticeLink: see partials/notices.ejs ("Moved to Trash." with an Open Trash link)
+    paths, pathTo: app.locals (config/urls.js), for links and form actions
+-%>
+<%- include('../partials/notices', { notices: pageNotices }) %>
+<div class="card">
+  <%- include('../partials/data-table', {
+        table: {
+          columns: [
+            { label: 'Cover', srOnly: true }, { label: 'Gallery' }, { label: 'Images', class: 'hidden sm:table-cell' },
+            { label: 'Size', class: 'hidden sm:table-cell' }, { label: 'Created', class: 'hidden md:table-cell' },
+            { label: 'Actions', srOnly: true, class: 'text-right' },
+          ],
+          rows,
+          row: 'rows/gallery',
+          rowLocals: { admin: false },
+          empty: { icon: 'fa-solid fa-images', text: 'No galleries yet.', link: { href: paths.newGallery, label: 'Add gallery' } },
+        },
+      }) %>
+</div>
+<%- include('../partials/pager', { pager: { olderUrl: locals.olderUrl, label: 'Older galleries' } }) %>

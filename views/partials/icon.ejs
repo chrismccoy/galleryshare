@@ -1,0 +1,7 @@
+<%#
+  Renders a decorative Font Awesome <i> icon (aria-hidden). Included wherever an icon is shown.
+  Locals:
+    name: Font Awesome class string, e.g. 'fa-solid fa-camera'
+    iconExtra: optional extra CSS classes (its own name, so a partial's `extra` never leaks into its icon)
+-%>
+<i class="<%= name %><%= locals.iconExtra ? ' ' + locals.iconExtra : '' %>" aria-hidden="true"></i>

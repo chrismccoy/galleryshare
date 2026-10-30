@@ -1,0 +1,50 @@
+<%#
+  Create invites and list existing ones (signed-in shell).
+  Rendered by GET and POST /admin/invites (routes/pages/admin/invites.js).
+  Locals:
+    title, csrfToken (chrome locals); notice, error (see partials/notices.ejs)
+    invites: [{ id, label, role, status, tone, created, expires, url }] (url: the pending invite's link for Copy, or
+      null; tone: the status pill's tone, partials/pill.ejs)
+    canCopy: true when SETTINGS_ENC_KEY is set, so new invites can be copied later
+    inviteDays, maxLabel: invite lifetime and label length limit
+    link: one-time link to show once after creation (see partials/admin/link.ejs), or null
+    form: { role, label } values to refill the form
+    paths: app.locals (config/urls.js PATHS), for links and form actions
+    pathTo: app.locals (config/urls.js PATH_TO), for the ones with an id, block or token
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<%- include('../../partials/admin/link', { link }) %>
+<div class="grid gap-6 lg:grid-cols-3">
+  <section class="card lg:col-span-1">
+    <div class="card-head"><h2>New invite</h2></div>
+    <div class="card-body">
+      <p class="help mb-3">Single-use link, valid for <%= plural(inviteDays, 'day') %>. Share it yourself; nothing is emailed.</p>
+      <form action="<%= paths.admin.invites %>" method="post">
+        <%- include('../../partials/csrf-field') %>
+        <div class="mb-3">
+          <label for="role" class="field-label">Role</label>
+          <%- include('../../partials/admin/role-select', { roleSelect: { selected: form.role } }) %>
+        </div>
+        <div class="mb-3">
+          <label for="label" class="field-label">Label (optional)</label>
+          <input id="label" name="label" type="text" maxlength="<%= maxLabel %>" value="<%= form.label %>" class="field-input" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Create invite</button>
+      </form>
+    </div>
+  </section>
+  <section class="card lg:col-span-2">
+    <div class="card-head"><h2>Invites</h2></div>
+    <%- include('../../partials/data-table', {
+          table: {
+            columns: [{ label: 'Label' }, { label: 'Role' }, { label: 'Status' }, { label: 'Created' }, { label: 'Expires' }, { label: '' }],
+            rows: invites,
+            row: 'rows/invite',
+            empty: { icon: 'fa-solid fa-user-plus', text: 'No invites yet.' },
+          },
+        }) %>
+    <% if (!canCopy) { %>
+      <p class="help border-t border-slate-100 px-5 py-3" data-copy-help>Set <code>SETTINGS_ENC_KEY</code> in <code>.env</code> to copy invite links again later.</p>
+    <% } %>
+  </section>
+</div>

@@ -1,0 +1,18 @@
+<%#
+  A danger button and its inline Yes/No confirm (partials/confirm-panel.ejs, public/js/inline-confirm.js).
+  Include it inside the [data-confirm] group whose other members hide while the confirm shows.
+  Included by pages/gallery-edit.ejs, partials/gallery-share-panel.ejs, partials/rows/trash.ejs (and the Trash
+  heading action, partials/head-actions/trash.ejs), partials/rows/gallery.ejs and partials/admin/share-revoke.ejs (the
+  share link's Revoke, on pages/admin/share.ejs and partials/rows/admin-share.ejs).
+  Locals (one object, so nothing is inherited from the including page, such as its `title`):
+    confirm: { icon, label, action, prompt, tooltip? }
+      icon: Font Awesome class string for the button
+      label: button text
+      action: POST URL of the Yes button
+      prompt: confirm text, e.g. 'Delete forever?'
+      tooltip: optional button tooltip
+-%>
+<button type="button" data-confirm-open<% if (confirm.tooltip) { %> title="<%= confirm.tooltip %>"<% } %> class="btn btn-danger btn-sm">
+  <%- include('icon', { name: confirm.icon }) %> <%= confirm.label %>
+</button>
+<%- include('confirm-panel', { confirm }) %>

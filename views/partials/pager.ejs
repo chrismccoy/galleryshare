@@ -1,0 +1,14 @@
+<%#
+  "Older results" link under a newest-first list (keyset paging, lib/paging.js). Renders nothing on
+  the last page. Included by pages/galleries.ejs, pages/trash.ejs, pages/activity.ejs, pages/admin/galleries.ejs and
+  pages/admin/shares.ejs.
+  Locals (one object, so nothing is read from the including page):
+    pager: { olderUrl, label? }
+      olderUrl: URL of the next older page, or null
+      label: optional link text (default "Older results")
+-%>
+<% if (pager.olderUrl) { %>
+  <nav class="mt-4 text-center" aria-label="Pages">
+    <a href="<%= pager.olderUrl %>" class="btn btn-quiet"><%= pager.label || "Older results" %></a>
+  </nav>
+<% } %>

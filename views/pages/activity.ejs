@@ -1,0 +1,52 @@
+<%#
+  Activity list with filters and "Older activity" paging (signed-in shell), for admins (all events, Person filter, From
+  column) and for users (their own events only).
+  Rendered by GET /admin/activity (routes/pages/admin/activity.js) and GET /dashboard/activity (routes/pages/activity.js)
+  through routes/view/activity-page.js.
+  Locals:
+    title (chrome local)
+    admin: true on the admin page
+    path: the page's path, the filter form's action
+    rows: [{ when, who, area: { text, tone }, what, details, from }]
+    filters: { personId, area, galleryId }: the active filters, each null when not filtered
+    people: [{ id, name }] Person options (admin only); areaOptions: [{ key, label }]; galleries: [{ id, title }]
+    retentionDays: days activity is kept
+    olderUrl: URL of the next older page, or null
+-%>
+<form method="get" action="<%= path %>" class="mb-4 flex flex-wrap items-end gap-3">
+  <% if (admin) { %>
+    <div>
+      <label for="person_id" class="field-label">Person</label>
+      <select id="person_id" name="person_id" class="field-input w-48">
+        <option value="">Everyone</option>
+        <% people.forEach(function (person) { %>
+          <option value="<%= person.id %>"<%= person.id === filters.personId ? ' selected' : '' %>><%= person.name %></option>
+        <% }); %>
+      </select>
+    </div>
+  <% } %>
+  <div>
+    <label for="area" class="field-label">Area</label>
+    <select id="area" name="area" class="field-input w-40">
+      <option value="">All areas</option>
+      <% areaOptions.forEach(function (option) { %>
+        <option value="<%= option.key %>"<%= option.key === filters.area ? ' selected' : '' %>><%= option.label %></option>
+      <% }); %>
+    </select>
+  </div>
+  <div>
+    <label for="gallery_id" class="field-label">Gallery</label>
+    <select id="gallery_id" name="gallery_id" class="field-input w-56">
+      <option value="">All galleries</option>
+      <% galleries.forEach(function (gallery) { %>
+        <option value="<%= gallery.id %>"<%= gallery.id === filters.galleryId ? ' selected' : '' %>><%= gallery.title %></option>
+      <% }); %>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-quiet">Filter</button>
+</form>
+<div class="card">
+  <%- include('../partials/activity-table', { activityTable: { rows, admin } }) %>
+  <div class="card-body border-t border-slate-200 text-sm text-slate-500">Newest first · kept <%= retentionDays %> days</div>
+</div>
+<%- include('../partials/pager', { pager: { olderUrl: locals.olderUrl, label: 'Older activity' } }) %>

@@ -1,0 +1,34 @@
+<%#
+  One card of a lightbox grid: thumbnail with its number and a hover zoom mark, title and caption. The link opens the
+  large image in a new tab; public/js/lightbox.js turns it into the lightbox opener and reads the data-* attributes.
+  Included by pages/share.ejs once per image, and rendered with ejs.renderFile by scripts/build-screenshot-gallery.js
+  once per screenshot, so both pages share this markup.
+  Locals (one object, so nothing is inherited from the including page):
+    card: { href, thumbUrl, title, caption, position, download, aspect, crop, showText, newTab }
+      href: the link target: the large image (the lightbox image too), or the image's own page
+      newTab: false opens the link in the same tab (the image page view); a new tab when omitted
+      thumbUrl: the grid image and strip thumbnail
+      title, caption: the card text (also the lightbox title and caption); a missing title shows no title line, and
+        the caption then describes the image
+      position: the number on the thumbnail
+      download: optional Save filename for the lightbox
+      aspect: Tailwind aspect-ratio class of the thumbnail, e.g. 'aspect-square'
+      crop: optional extra image class, e.g. 'object-top' for screenshots
+      showText: false to leave out the title and caption under the thumbnail (the lightbox still shows them);
+        shown when omitted
+-%>
+<figure class="share-figure group transition-[transform,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-bento-md" data-shot data-title="<%= card.title || '' %>" data-text="<%= card.caption %>" data-thumb="<%= card.thumbUrl %>"<% if (card.download) { %> data-download="<%= card.download %>"<% } %>>
+  <a href="<%= card.href %>"<% if (card.newTab !== false) { %> target="_blank" rel="noopener"<% } %> class="group relative block <%= card.aspect %> overflow-hidden rounded-t-[14px]<%= card.showText === false ? '' : ' border-b border-slate-200' %> bg-black/[0.06]">
+    <img src="<%= card.thumbUrl %>" alt="<%= card.title || card.caption %>" loading="lazy" class="h-full w-full object-cover<%= card.crop ? ' ' + card.crop : '' %> transition-transform duration-500 group-hover:scale-105" />
+    <span class="pointer-events-none absolute left-2 top-[6px] rounded-pill bg-white/90 px-[7px] py-[2px] text-[11px] font-extrabold text-slate-900 backdrop-blur"><%= card.position %></span>
+    <span class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/[0.35] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+      <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.95] text-accent shadow-[0_4px_16px_rgba(0,0,0,0.2)] backdrop-blur">
+        <%- include('icon', { name: 'fa-solid fa-magnifying-glass-plus' }) %>
+      </span>
+    </span>
+  </a>
+  <% if (card.showText !== false) { %><figcaption class="px-4 py-3">
+    <% if (card.title) { %><p class="text-sm font-medium text-slate-900"><%= card.title %></p><% } %>
+    <p class="mt-0.5 text-xs text-muted"><%= card.caption %></p>
+  </figcaption><% } %>
+</figure>

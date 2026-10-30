@@ -1,0 +1,33 @@
+<%#
+  One Trash row: cover, title (below the sm breakpoint with the count, trashed date and purge date under it), images
+  and size, trashed date with the purge date, Restore and Delete forever (inline confirm).
+  Rendered through partials/data-table.ejs by pages/trash.ejs.
+  Locals: item: { id, title, imageCount, size, thumbImageId, trashedWhen, purgeOn }; pathTo, plural (app locals);
+  csrfToken (chrome local), for the forms.
+-%>
+<tr data-trash-row>
+  <td class="w-16"><%- include('../gallery-cover', { cover: { item } }) %></td>
+  <td>
+    <span class="font-medium text-slate-800"><%= item.title %></span>
+    <p class="mt-1 text-xs text-slate-500 sm:hidden"><%= plural(item.imageCount, 'image') %> · trashed <span class="whitespace-nowrap"><%= item.trashedWhen %></span></p>
+    <p class="mt-0.5 text-xs text-slate-400 sm:hidden">Deleted forever on <span class="whitespace-nowrap"><%= item.purgeOn %></span></p>
+  </td>
+  <td class="hidden sm:table-cell"><%= item.imageCount %> · <%= item.size %></td>
+  <td class="hidden whitespace-nowrap sm:table-cell">
+    <%= item.trashedWhen %>
+    <p class="mt-0.5 text-xs text-slate-400">Deleted forever on <%= item.purgeOn %></p>
+  </td>
+  <td>
+    <div class="flex flex-wrap items-center justify-end gap-1.5" data-confirm>
+      <%- include('../post-button', {
+            post: {
+              action: pathTo.trashItem(item.id, 'restore'), label: 'Restore', btn: 'btn-quiet btn-sm',
+              icon: 'fa-solid fa-rotate-left', confirmHide: true,
+            },
+          }) %>
+      <%- include('../danger-confirm', { confirm: {
+            icon: 'fa-solid fa-fire', label: 'Delete forever', action: pathTo.trashItem(item.id, 'purge'), prompt: 'Delete forever?',
+          } }) %>
+    </div>
+  </td>
+</tr>

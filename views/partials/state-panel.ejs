@@ -1,0 +1,24 @@
+<%#
+  Centred status panel for the public layout: a coloured icon mark, a heading, optional help text and
+  an optional link. Included by pages/error.ejs, pages/notfound.ejs, pages/share-unavailable.ejs,
+  pages/share-preview.ejs, and pages/invite.ejs and pages/reset.ejs (for an unusable link).
+  Locals (one object, so nothing is inherited from the including page, such as its `link`):
+    state: { tone, icon, heading, help?, link? }
+      tone: 'red' | 'amber' | 'slate' (the mark's colour, .state-<tone>)
+      icon: Font Awesome class string for the mark
+      heading: heading text
+      help: optional line under the heading
+      link: optional { href, label, icon } button under the text
+-%>
+<div class="panel text-center">
+  <div class="state-mark state-<%= state.tone %>">
+    <%- include('icon', { name: state.icon }) %>
+  </div>
+  <h1 class="text-[16px] font-semibold text-slate-900"><%= state.heading %></h1>
+  <% if (state.help) { %><p class="help"><%= state.help %></p><% } %>
+  <% if (state.link) { %>
+    <a href="<%= state.link.href %>" class="btn btn-quiet btn-sm mt-3.5">
+      <% if (state.link.icon) { %><%- include('icon', { name: state.link.icon }) %> <% } %><%= state.link.label %>
+    </a>
+  <% } %>
+</div>

@@ -1,0 +1,26 @@
+<%#
+  The public page layout (no sidebar): document head, the public top bar, the page body, the end of <main>, the
+  scripts and the document end. Every tag it opens it closes here.
+  Rendered by renderPublic (routes/view/respond.js) around a page view that was rendered first.
+  Two variants:
+    centred (sign-in, invite, reset, error, not found, and the unavailable and preview share pages): the body
+      sits in the narrow .pub-centre column
+    wide (the shared gallery pages): the body spans the page
+  Locals:
+    page: { body, wide } from renderPublic: the rendered page view (trusted server HTML) and the variant
+    title, meta: for partials/head.ejs
+    scripts: optional string[]: classic scripts under /js the page needs
+    the chrome locals needed by head and the public header (user, brand)
+-%>
+<%- include('../partials/head') %>
+<%- include('../partials/public/header') %>
+<% if (page.wide) { %>
+<%- page.body %>
+<% } else { %>
+  <div class="pub-centre">
+<%- page.body %>
+  </div>
+<% } %>
+</main>
+<%- include('../partials/page-scripts', { scripts: locals.scripts ?? [] }) %>
+<%- include('../partials/foot') %>

@@ -1,0 +1,26 @@
+<%#
+  One row of the admin invites list: label, role, status pill, created and expiry dates, and for a pending invite
+  Copy (when its link can be shown again) and Revoke.
+  Rendered through partials/data-table.ejs by pages/admin/invites.ejs.
+  Locals: item: { id, label, role, status: { key, text, tone }, created, expires, url }; pathTo (app locals); csrfToken (chrome
+  local), for the Revoke form.
+-%>
+<tr>
+  <td><%= item.label || '' %></td>
+  <td class="capitalize"><%= item.role %></td>
+  <td><%- include('../pill', { pill: item.status }) %></td>
+  <td><%= item.created %></td>
+  <td><%= item.expires %></td>
+  <td>
+    <% if (item.status.key === 'pending') { %>
+      <div class="flex flex-wrap items-center justify-end gap-1.5">
+        <% if (item.url) { %>
+          <%- include('../copy-button', { url: item.url }) %>
+        <% } %>
+        <%- include('../post-button', {
+              post: { action: pathTo.adminInvite(item.id, 'revoke'), label: 'Revoke', btn: 'btn-danger btn-sm', icon: 'fa-solid fa-ban' },
+            }) %>
+      </div>
+    <% } %>
+  </td>
+</tr>

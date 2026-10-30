@@ -1,0 +1,28 @@
+<%#
+  Password reset form, or a message when the link is unusable (public layout).
+  Rendered by GET and POST /reset/:token (routes/pages/reset.js).
+  Locals:
+    csrfToken, brand (global locals)
+    problem: why the link cannot be used, or null/empty when it can
+    error: form error message, or null
+    token: reset token, used in the form action
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+-%>
+    <% if (problem) { %>
+      <%- include('../partials/state-panel', { state: {
+            tone: 'amber',
+            icon: 'fa-solid fa-link-slash',
+            heading: problem,
+            help: 'Ask the admin for a new reset link.',
+          } }) %>
+    <% } else { %>
+      <div class="panel">
+        <%- include('../partials/public/panel-head', { head: { icon: 'fa-solid fa-key', heading: 'Set a new password', sub: 'This signs you out everywhere else.' } }) %>
+        <%- include('../partials/notices', { notices: pageNotices }) %>
+        <form action="<%= pathTo.reset(token) %>" method="post">
+          <%- include('../partials/csrf-field') %>
+          <%- include('../partials/new-password-field', { name: 'password', label: 'New password' }) %>
+          <button type="submit" class="btn btn-dark w-full">Set password</button>
+        </form>
+      </div>
+    <% } %>

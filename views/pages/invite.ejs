@@ -1,0 +1,39 @@
+<%#
+  Invite redemption page: account creation form, or a message when the link is unusable (public layout).
+  Rendered by GET and POST /invite/:token (routes/pages/invite.js).
+  Locals:
+    maxDisplayName: longest name accepted
+    csrfToken, brand (global locals)
+    problem: why the invite cannot be used, or null/empty when it can
+    error: form error message, or null
+    token: invite token, used in the form action
+    form: { display_name, email } values to refill the form
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+-%>
+    <% if (problem) { %>
+      <%- include('../partials/state-panel', { state: {
+            tone: 'amber',
+            icon: 'fa-solid fa-link-slash',
+            heading: problem,
+            help: 'Ask the admin for a new invite link.',
+          } }) %>
+    <% } else { %>
+      <div class="panel">
+        <%- include('../partials/public/panel-head', { head: { icon: 'fa-solid fa-user-plus', heading: 'Create your account', sub: `You were invited to ${brand.name}.` } }) %>
+        <%- include('../partials/notices', { notices: pageNotices }) %>
+        <form action="<%= pathTo.invite(token) %>" method="post">
+          <%- include('../partials/csrf-field') %>
+          <div class="mb-3.5">
+            <label for="display_name" class="field-label">Your name</label>
+            <input id="display_name" name="display_name" type="text" maxlength="<%= maxDisplayName %>" autocomplete="name" required value="<%= form.display_name %>" class="field-input" />
+          </div>
+          <div class="mb-3.5">
+            <label for="email" class="field-label">Email</label>
+            <input id="email" name="email" type="email" autocomplete="username" required value="<%= form.email %>" class="field-input" />
+            <p class="help">Used only to sign in. Nothing is ever emailed.</p>
+          </div>
+          <%- include('../partials/new-password-field', { name: 'password', label: 'Password' }) %>
+          <button type="submit" class="btn btn-dark w-full">Create account</button>
+        </form>
+      </div>
+    <% } %>

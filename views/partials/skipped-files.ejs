@@ -1,0 +1,19 @@
+<%#
+  The list of files an ingest job could not add: each file's name and reason, and a closing "and N more" item.
+  Included by partials/gallery-skipped.ejs (the gallery edit banner) and pages/gallery-job.ejs (the job page), which
+  write their own heading over it.
+  Locals (one object, so nothing is inherited from the including page):
+    skippedList: { items, listClass }
+      items: [{ name, reason, more? }]; a closing item with `more` stands for that many further files and shows only
+        its reason
+      listClass: optional extra classes of the <ul>, e.g. 'text-sm text-slate-600'
+-%>
+<ul class="mt-1 list-disc pl-5<%= skippedList.listClass ? ' ' + skippedList.listClass : '' %>">
+  <% skippedList.items.forEach(function (item) { %>
+    <% if (item.more) { %>
+      <li data-skipped-more><%= item.reason %></li>
+    <% } else { %>
+      <li><span class="break-all font-medium"><%= item.name %></span>: <%= item.reason %></li>
+    <% } %>
+  <% }); %>
+</ul>

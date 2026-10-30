@@ -1,0 +1,41 @@
+<%#
+  One gallery row, in My galleries or in the admin galleries list (admin): the cover (My galleries) or the owner
+  (admin list), the title with the Shared pill when the gallery has a live link (and in My galleries the amber
+  "Edited by an admin" pill when an admin made the last change), image count, size, created date, and Edit and Move to
+  Trash (inline confirm; an admin's goes to the owner's Trash).
+  Rendered through partials/data-table.ejs by pages/galleries.ejs and pages/admin/galleries.ejs.
+  Locals:
+    item: { id, title, imageCount, size, created, shared } plus { thumbImageId, editedByAdmin } for My galleries
+      and { owner } for the admin list (routes/view/gallery-rows.js)
+    admin: true for the admin galleries list, false for My galleries (both tables pass it, through
+      data-table rowLocals, so no page local of that name can reach the row)
+    pathTo, plural: app locals
+-%>
+<% if (typeof admin !== 'boolean') throw new Error('rows/gallery: pass rowLocals { admin: true | false }'); -%>
+<tr data-gallery-row>
+  <% if (admin) { %>
+    <td><%= item.owner %></td>
+  <% } else { %>
+    <td class="w-16"><%- include('../gallery-cover', { cover: { item } }) %></td>
+  <% } %>
+  <td>
+    <a href="<%= pathTo.gallery(item.id) %>" class="font-medium text-slate-800 hover:underline"><%= item.title %></a>
+    <% if (item.shared) { %><%- include('../shared-pill', { pill: { extra: 'ml-1.5' } }) %><% } %>
+    <% if (!admin && item.editedByAdmin) { %><%- include('../edited-by-admin-pill', { pill: { extra: 'ml-1.5' } }) %><% } %>
+    <p class="mt-0.5 text-xs text-slate-500 sm:hidden"><%= plural(item.imageCount, 'image') %> · <%= item.size %></p>
+  </td>
+  <td class="hidden sm:table-cell" data-image-count><%= item.imageCount %></td>
+  <td class="hidden whitespace-nowrap sm:table-cell"><%= item.size %></td>
+  <td class="hidden whitespace-nowrap md:table-cell"><%= item.created %></td>
+  <td>
+    <div class="flex flex-wrap items-center justify-end gap-1.5" data-confirm>
+      <a href="<%= pathTo.gallery(item.id) %>" data-confirm-hide class="btn btn-primary btn-sm">
+        <%- include('../icon', { name: 'fa-solid fa-pen' }) %> Edit
+      </a>
+      <%- include('../danger-confirm', { confirm: {
+            icon: 'fa-regular fa-trash-can', label: admin ? 'Move to Trash' : 'Delete', tooltip: 'Move to Trash',
+            action: pathTo.gallery(item.id, 'delete'), prompt: 'Move to Trash?',
+          } }) %>
+    </div>
+  </td>
+</tr>

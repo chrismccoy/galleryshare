@@ -1,0 +1,29 @@
+<%#
+  The table inside a list card: a scrolling .data-table with a heading row and one row partial per item, or the empty
+  state when there are no items. The card around it (and any card heading) stays in the page.
+  Included by pages/galleries.ejs, pages/trash.ejs, partials/activity-table.ejs (the Activity pages and the Recent
+  activity cards) and pages/admin/{galleries,invites,overview,share,shares,users}.ejs.
+  Locals (one object, so nothing is inherited from the including page):
+    table: { columns, rows, row, rowLocals, empty }
+      columns: [{ label, srOnly, class }]: heading cells; srOnly hides the label visually; class is the cell's class
+      rows: the items, each rendered as `item` by the row partial
+      row: the row partial, relative to views/partials (e.g. 'rows/gallery')
+      rowLocals: optional values every row gets besides `item` (e.g. { admin: true })
+      empty: optional { icon, text, note?, link? } for partials/empty-state.ejs, shown in a .card-body when rows is empty
+-%>
+<% if (table.rows.length) { %>
+  <div class="overflow-x-auto">
+    <table class="data-table">
+      <thead><tr><% table.columns.forEach(function (column) { %><th<% if (column.class) { %> class="<%= column.class %>"<% } %>><% if (column.srOnly) { %><span class="sr-only"><%= column.label %></span><% } else { %><%= column.label %><% } %></th><% }); %></tr></thead>
+      <tbody>
+        <% table.rows.forEach(function (item) { %>
+          <%- include(table.row, { ...(table.rowLocals ?? {}), item }) %>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else if (table.empty) { %>
+  <div class="card-body">
+    <%- include('empty-state', { empty: table.empty }) %>
+  </div>
+<% } %>

@@ -1,0 +1,53 @@
+<%#
+  One image on the gallery edit view: drag handle, thumbnail, title and caption fields (placeholders show the
+  render-time defaults), Up/Down buttons and Delete. The title, caption and Delete belong to the Details form
+  (form="gallery-details", names images[<id>][title|caption|remove]): "Save gallery" (in Details, or the save bar)
+  saves them. public/js/save-bar.js counts the unsaved ones and sends only the changed texts (data-image-field).
+  Delete is a checkbox styled as a button: checking it fades the row and marks the image for removal on save (no
+  script needed); Undo, or Discard on the save bar, unchecks it.
+  public/js/reorder.js finds the row by data-image-id, the handle by data-drag-handle, the buttons by
+  data-move, and updates data-default-caption placeholders and data-position after a reorder.
+  Included by pages/gallery-edit.ejs once per image, inside the [data-reorder-list] list.
+  Locals:
+    image: gallery_images row plus position (1-based) and defaultCaption ('Image #<position>'); removing: true keeps
+      Delete checked (a refused save that marked it)
+    defaultTitle: placeholder of the title field ('Title')
+    fieldMax: { title, caption } maxlength of the fields (domain/limits.js GALLERY_FIELD_MAX)
+    pathTo: app.locals (config/urls.js PATH_TO), for the thumbnail
+-%>
+<li id="image-<%= image.id %>" data-image-id="<%= image.id %>" class="flex items-start gap-3 px-4 py-3 has-[[data-remove-image]:checked]:bg-red-50/60">
+  <span data-drag-handle class="mt-7 cursor-grab select-none text-slate-400 hover:text-slate-600" title="Drag to reorder">
+    <%- include('icon', { name: 'fa-solid fa-grip-vertical' }) %>
+  </span>
+  <img src="<%= pathTo.media(image.id, 'thumb') %>" alt="" loading="lazy" draggable="false" class="h-20 w-20 flex-shrink-0 rounded-md border border-slate-200 bg-slate-100 object-cover [li:has([data-remove-image]:checked)_&]:opacity-40" />
+  <div class="min-w-0 flex-1">
+    <div class="grid gap-2 sm:grid-cols-2">
+      <div>
+        <label for="title-<%= image.id %>" class="sr-only">Title</label>
+        <input id="title-<%= image.id %>" name="images[<%= image.id %>][title]" form="gallery-details" data-image-field="<%= image.id %>" type="text" maxlength="<%= fieldMax.title %>" value="<%= image.title ?? '' %>" placeholder="<%= defaultTitle %>" class="field-input" />
+      </div>
+      <div>
+        <label for="caption-<%= image.id %>" class="sr-only">Caption</label>
+        <input id="caption-<%= image.id %>" name="images[<%= image.id %>][caption]" form="gallery-details" data-image-field="<%= image.id %>" type="text" maxlength="<%= fieldMax.caption %>" value="<%= image.caption ?? '' %>" placeholder="<%= image.defaultCaption %>" data-default-caption class="field-input" />
+      </div>
+      <div class="flex flex-wrap items-center gap-2 sm:col-span-2">
+        <span class="chip" data-position>#<%= image.position %></span>
+        <span class="min-w-0 truncate text-meta text-slate-400" title="Original file name, never shown to visitors"><%= image.original_name %></span>
+      </div>
+    </div>
+    <div class="mt-2 flex flex-wrap items-center gap-2">
+      <button type="button" class="btn btn-quiet btn-sm" data-move="up" aria-label="Move image up">
+        <%- include('icon', { name: 'fa-solid fa-arrow-up' }) %> Up
+      </button>
+      <button type="button" class="btn btn-quiet btn-sm" data-move="down" aria-label="Move image down">
+        <%- include('icon', { name: 'fa-solid fa-arrow-down' }) %> Down
+      </button>
+      <label class="btn btn-quiet btn-sm cursor-pointer text-red-700 has-[:checked]:border-slate-300 has-[:checked]:text-slate-700 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500" title="Delete this image when the gallery is saved">
+        <input type="checkbox" name="images[<%= image.id %>][remove]" form="gallery-details" class="peer sr-only" data-remove-image<%= image.removing ? ' checked' : '' %> />
+        <span class="inline-flex items-center gap-1.5 peer-checked:hidden"><%- include('icon', { name: 'fa-regular fa-trash-can' }) %> Delete</span>
+        <span class="hidden items-center gap-1.5 peer-checked:inline-flex"><%- include('icon', { name: 'fa-solid fa-rotate-left' }) %> Undo</span>
+      </label>
+      <span class="pill pill-red hidden [li:has([data-remove-image]:checked)_&]:inline-flex" data-remove-note>Deleted when you save</span>
+    </div>
+  </div>
+</li>

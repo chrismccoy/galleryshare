@@ -1,0 +1,19 @@
+<%#
+  Compact page hero: an icon tile on the left, the page's <h1> and a one-line lead. The shell
+  (layouts/shell.ejs) draws it instead of the plain heading row when the page passes `hero`.
+  Locals:
+    title: the <h1> text
+    hero: { icon: icon name, a key of HERO_ICONS below (routes hold no class strings), lead: one short sentence }
+-%>
+<% const HERO_ICONS = { 'add-gallery': 'fa-solid fa-images' };
+   // An unknown name is a bug in the route: fail loudly, as partials/kpi-card.ejs does.
+   if (!HERO_ICONS[hero.icon]) throw new Error(`page-hero: unknown icon "${hero.icon}"`); -%>
+<div data-page-head data-page-hero class="mb-5 flex max-w-4xl items-center gap-4 rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-white px-4 py-4 shadow-sm sm:px-5">
+  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-lg text-white shadow-sm">
+    <%- include('icon', { name: HERO_ICONS[hero.icon] }) %>
+  </span>
+  <div class="min-w-0">
+    <h1 class="text-xl font-semibold tracking-tight text-slate-900"><%= title %></h1>
+    <p class="mt-0.5 text-sm text-slate-700"><%= hero.lead %></p>
+  </div>
+</div>

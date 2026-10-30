@@ -1,0 +1,21 @@
+<%#
+  The activity table: When, Who, Area, What, Details, and From (IP · browser) for admins, one partials/rows/activity.ejs
+  row per event, or "No activity yet." Included by pages/activity.ejs (the full pages) and partials/recent-activity.ejs
+  (the dashboard and Overview cards).
+  Locals (one object, so nothing is inherited from the including page):
+    activityTable: { rows, admin }
+      rows: [{ when, who, area, what, details, from }] from routes/view/activity-page.js toActivityRow
+      admin: true adds the From column
+-%>
+<%- include('data-table', {
+      table: {
+        columns: [
+          { label: 'When' }, { label: 'Who' }, { label: 'Area' }, { label: 'What' }, { label: 'Details' },
+          ...(activityTable.admin ? [{ label: 'From' }] : []),
+        ],
+        rows: activityTable.rows,
+        row: 'rows/activity',
+        rowLocals: { admin: activityTable.admin },
+        empty: { icon: 'fa-solid fa-clock-rotate-left', text: 'No activity yet.' },
+      },
+    }) %>

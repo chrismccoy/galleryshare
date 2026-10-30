@@ -1,0 +1,19 @@
+<%#
+  Admin view of one user: profile and actions (signed-in shell).
+  Rendered by GET /admin/users/:id and by the user action POSTs on errors (routes/pages/admin/users.js).
+  Locals:
+    title, csrfToken (chrome locals); notice, error (see partials/notices.ejs); link (see partials/admin/link.ejs)
+    target: the user row
+    accountStatus: { text, tone } the account's status pill
+    canResetLink, canEnable, canDisable, canDelete, canChangeRole, ownAccountNote: which account actions
+      partials/admin/user-profile.ejs shows (accountActions in domain/accounts.js)
+    joined: formatted creation time
+    paths: app.locals (config/urls.js PATHS), for links and form actions
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<%- include('../../partials/admin/link', { link }) %>
+<p class="mb-4"><a href="<%= paths.admin.users %>" class="text-sm text-brand-600 hover:underline">All users</a></p>
+<%- include('../../partials/admin/user-profile', {
+      target, accountStatus, joined,
+      canResetLink, canEnable, canDisable, canDelete, canChangeRole, ownAccountNote,
+    }) %>

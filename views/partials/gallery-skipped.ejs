@@ -1,0 +1,18 @@
+<%#
+  Banner of the gallery edit view listing the files the last finished ingest job could not add (shown once; it can be
+  dismissed, partials/notice-dismiss.ejs).
+  Included by pages/gallery-edit.ejs.
+  Locals:
+    skipped: [{ name, reason, more? }]; a closing item with `more` stands for that many further files and shows only
+      its reason
+    skippedTotal: how many files `skipped` stands for
+    plural: app local (lib/plural.js)
+-%>
+<div class="notice notice-warn" role="status" data-notice data-skipped>
+  <%- include('icon', { name: 'fa-solid fa-triangle-exclamation' }) %>
+  <div>
+    <p><%= plural(skippedTotal, 'file') %> <%= skippedTotal === 1 ? 'was' : 'were' %> not added:</p>
+    <%- include('skipped-files', { skippedList: { items: skipped } }) %>
+  </div>
+  <%- include('notice-dismiss') %>
+</div>

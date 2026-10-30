@@ -1,0 +1,28 @@
+<%#
+  Success and error notices, shown above a page's content or a form.
+  Included by the admin pages, the sign-in, invite, reset and account forms, My galleries, Trash, the new
+  gallery and gallery edit views, the ingest job page and the user delete page.
+  Locals (one object, so nothing is inherited from the including page; a missing object throws, so the mistake
+  shows as an error page rather than a silently missing message):
+    notices: { notice, noticeLink, error }, each optional
+      notice: success message (green, role="status")
+      noticeLink: { href, label } link shown after the notice (e.g. "Open Trash")
+      error: error message (red, role="alert")
+  Each notice has a dismiss button (partials/notice-dismiss.ejs).
+-%>
+<% if (!locals.notices) throw new Error('notices: pass { notices: { notice, noticeLink, error } }');
+   const { notice, noticeLink, error } = notices; -%>
+<% if (notice) { %>
+  <div class="notice notice-ok" role="status" data-notice>
+    <%- include('icon', { name: 'fa-solid fa-circle-check' }) %>
+    <span><%= notice %><% if (noticeLink) { %> <a href="<%= noticeLink.href %>" class="font-medium underline"><%= noticeLink.label %></a><% } %></span>
+    <%- include('notice-dismiss') %>
+  </div>
+<% } %>
+<% if (error) { %>
+  <div class="notice notice-error" role="alert" data-notice>
+    <%- include('icon', { name: 'fa-solid fa-circle-exclamation' }) %>
+    <span><%= error %></span>
+    <%- include('notice-dismiss') %>
+  </div>
+<% } %>

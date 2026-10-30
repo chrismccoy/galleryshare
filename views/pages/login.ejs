@@ -1,0 +1,27 @@
+<%#
+  Sign-in form (public layout).
+  Rendered by GET and POST /login and by its rate-limit refusal (routes/pages/auth.js).
+  Locals:
+    csrfToken, brand (global locals)
+    notice: message such as the password-reset confirmation, or null
+    error: sign-in error, or null
+    email: value to refill the email field
+    action: form action URL (carries ?next= when set)
+-%>
+    <div class="panel">
+      <%- include('../partials/public/panel-head', { head: { sub: 'Sign in to continue.' } }) %>
+      <%- include('../partials/notices', { notices: pageNotices }) %>
+      <form action="<%= action %>" method="post">
+        <%- include('../partials/csrf-field') %>
+        <div class="mb-3.5">
+          <label for="email" class="field-label">Email</label>
+          <input id="email" name="email" type="email" autocomplete="username" required autofocus value="<%= email %>" class="field-input" />
+        </div>
+        <div class="mb-3.5">
+          <label for="password" class="field-label">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required class="field-input" />
+        </div>
+        <button type="submit" class="btn btn-dark w-full">Log in</button>
+      </form>
+      <p class="help text-center">No account? Ask the admin for an invite link.</p>
+    </div>

@@ -1,0 +1,11 @@
+<%#
+  Share theme "None": today's plain page, with no shell and no photo count.
+  Included by pages/share.ejs, pages/share-single.ejs and pages/share-image.ejs through the theme key (domain/share-themes.js); it has no
+  styles of its own.
+  Locals (one object, so nothing is inherited from the including page):
+    shell: { gallery, zipUrl, count, body }: the page heading values, the photo count text and the rendered page body
+-%>
+<div data-share-theme="none">
+  <%- include('../share-header', { header: { gallery: shell.gallery, zipUrl: shell.zipUrl, count: null, titleShown: true } }) %>
+  <%- shell.body %>
+</div>

@@ -1,0 +1,81 @@
+<%#
+  The upload form: ONE drop zone that takes images and ZIP files together, posted as the multipart field `files`.
+  public/js/gallery-upload.js keeps the list of chosen files (add, remove, clear all), shows a summary, flags images
+  over the image limit, ZIP files over the ZIP limit and a total over the batch limit, and refuses other file types.
+  It is hidden until that script removes the `hidden` attribute; <noscript> holds a plain form that posts the same
+  field to the same route. Included by pages/gallery-new.ejs and pages/gallery-edit.ejs ("Add images").
+  Locals:
+    uploadAction: POST URL of the upload (multipart, field `files`: images and ZIP files)
+    upload: { accept, rules, limitsText, maxImageMb, maxUploadBatchMb, maxZipUploadMb, userQuotaMb }
+      from routes/view/gallery-edit.js uploadHelp: `limitsText` states the effective limits in one sentence set, shown
+      in both forms; the three MB limits are rendered as data-* for the script; `accept` (the file inputs'
+      accept attribute) and `rules` ({ imageExts, imageTypes, zipExts, zipTypes, unsupported }, rendered as data-*
+      for the script) come from media/image-types.js UPLOAD_ACCEPT and UPLOAD_RULES, so browser and server agree
+    csrfToken (chrome local), for partials/csrf-field.ejs
+-%>
+<div hidden data-upload-root>
+  <form action="<%= uploadAction %>" method="post" enctype="multipart/form-data" class="card" data-upload-form data-max-image-mb="<%= upload.maxImageMb %>" data-max-zip-mb="<%= upload.maxZipUploadMb %>" data-max-batch-mb="<%= upload.maxUploadBatchMb %>" data-image-exts="<%= upload.rules.imageExts %>" data-image-types="<%= upload.rules.imageTypes %>" data-zip-exts="<%= upload.rules.zipExts %>" data-zip-types="<%= upload.rules.zipTypes %>" data-unsupported="<%= upload.rules.unsupported %>" novalidate>
+    <%- include('csrf-field') %>
+    <div class="card-head">
+      <%- include('icon', { name: 'fa-solid fa-images', iconExtra: 'text-slate-400' }) %> <h2>Images and ZIP files</h2>
+    </div>
+    <div class="card-body">
+      <label for="upload-files" class="sr-only">Choose images or ZIP files</label>
+      <div data-drop-zone class="mb-3 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center">
+        <%- include('icon', { name: 'fa-solid fa-cloud-arrow-up', iconExtra: 'text-3xl text-slate-400' }) %>
+        <span class="mt-2 text-sm font-medium text-slate-700">Drop images and ZIP files here</span>
+        <span class="help">Mix images and .zip files freely; images in any folder of a ZIP file are added, other files are skipped.</span>
+        <span class="help mt-0"><%= upload.limitsText %></span>
+        <button type="button" class="btn btn-outline mt-3" data-upload-pick><%- include('icon', { name: 'fa-solid fa-folder-open' }) %> Choose files</button>
+        <input id="upload-files" type="file" name="files" multiple accept="<%= upload.accept %>" class="sr-only" tabindex="-1" data-upload-input />
+      </div>
+      <div class="mb-3" data-upload-selection hidden>
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <p class="help m-0" data-upload-chosen></p>
+          <button type="button" class="btn btn-outline btn-sm" data-upload-clear>Clear all</button>
+        </div>
+        <ul class="m-0 list-none divide-y divide-slate-100 rounded-lg border border-slate-200 p-0" data-upload-list aria-label="Selected files"></ul>
+        <%# One row of the list, cloned by public/js/gallery-upload.js for each chosen file; data-invalid marks a file over its size limit. %>
+        <template data-upload-row>
+          <li class="group flex items-center gap-3 px-3 py-2 text-sm text-slate-700 data-[invalid]:bg-red-50 data-[invalid]:text-red-700">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-slate-100" data-row-lead></span>
+            <span class="min-w-0 flex-1 truncate font-medium" data-row-name></span>
+            <span class="shrink-0 text-xs text-slate-500 group-data-[invalid]:font-medium group-data-[invalid]:text-red-700" data-row-size></span>
+            <button type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-600" data-upload-remove>
+              <%- include('icon', { name: 'fa-solid fa-xmark' }) %>
+            </button>
+          </li>
+        </template>
+      </div>
+      <p class="sr-only" role="status" aria-live="polite" data-upload-status></p>
+      <div aria-live="polite" data-upload-live>
+        <div class="notice notice-error mb-3" data-upload-error hidden>
+          <%- include('icon', { name: 'fa-solid fa-circle-exclamation' }) %>
+          <span data-upload-error-text></span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" data-upload-submit disabled>
+        <%- include('icon', { name: 'fa-solid fa-upload' }) %> <span data-upload-submit-text>Upload</span>
+      </button>
+    </div>
+  </form>
+</div>
+<noscript>
+  <form action="<%= uploadAction %>" method="post" enctype="multipart/form-data" class="card">
+    <%- include('csrf-field') %>
+    <div class="card-head">
+      <%- include('icon', { name: 'fa-solid fa-images', iconExtra: 'text-slate-400' }) %> <h2>Images and ZIP files</h2>
+    </div>
+    <div class="card-body">
+      <label class="field-label" for="upload-files-plain">Choose images or ZIP files</label>
+      <input id="upload-files-plain" type="file" name="files" multiple accept="<%= upload.accept %>" class="block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200" />
+      <p class="help mb-3">Images and .zip files can be mixed. <%= upload.limitsText %></p>
+      <button type="submit" class="btn btn-primary">
+        <%- include('icon', { name: 'fa-solid fa-upload' }) %> Upload
+      </button>
+    </div>
+  </form>
+</noscript>
+<% if (upload.userQuotaMb > 0) { %>
+  <p class="help">Storage per user is limited to <%= upload.userQuotaMb %> MB.</p>
+<% } %>

@@ -1,0 +1,40 @@
+<%#
+  The user's Trash: deleted galleries with Restore and Delete forever per row and an Empty trash button,
+  each Delete forever / Empty trash behind the inline Yes/No confirm (signed-in shell).
+  Below the sm breakpoint the Trashed column is hidden and its facts move under the title.
+  Rendered by GET /dashboard/trash (routes/pages/trash.js).
+  Locals:
+    title, csrfToken (chrome locals)
+    rows: [{ id, title, imageCount, size, thumbImageId, trashedWhen, purgeOn (YYYY-MM-DD) }]
+    retentionDays: days a gallery stays in Trash
+    olderUrl: URL of the next older page, or null
+    notice: message such as "Gallery restored.", or null
+    paths, pathTo: app.locals (config/urls.js), for links and form actions
+-%>
+<% const retentionText = `Deleted galleries stay here for ${plural(retentionDays, 'day')}, then they are deleted forever.`; -%>
+<%- include('../partials/notices', { notices: pageNotices }) %>
+<% if (rows.length) { %>
+  <p class="mb-4 text-sm text-slate-500">
+    <%= retentionText %>
+    Restore one to put it back in My galleries.
+  </p>
+<% } %>
+<div class="card">
+  <%- include('../partials/data-table', {
+        table: {
+          columns: [
+            { label: 'Cover', srOnly: true }, { label: 'Gallery' }, { label: 'Images', class: 'hidden sm:table-cell' },
+            { label: 'Trashed', class: 'hidden sm:table-cell' }, { label: 'Actions', srOnly: true, class: 'text-right' },
+          ],
+          rows,
+          row: 'rows/trash',
+          empty: {
+            icon: 'fa-regular fa-trash-can',
+            text: 'Trash is empty.',
+            note: retentionText,
+            link: { href: paths.galleries, label: 'Back to My galleries' },
+          },
+        },
+      }) %>
+</div>
+<%- include('../partials/pager', { pager: { olderUrl: locals.olderUrl, label: 'Older galleries' } }) %>

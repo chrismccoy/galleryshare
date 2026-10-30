@@ -1,0 +1,9 @@
+<%#
+  Copy button for a link (public/js/copy-link.js copies it and shows "Copied" or "Copy failed" for two seconds).
+  Included by partials/gallery-share-panel.ejs (the share link) and partials/rows/invite.ejs (invite links).
+  Locals:
+    url: the link to copy
+-%>
+<button type="button" data-copy-link="<%= url %>" class="btn btn-primary btn-sm">
+  <%- include('icon', { name: 'fa-regular fa-copy' }) %> <span data-copy-label>Copy</span>
+</button>

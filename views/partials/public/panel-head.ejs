@@ -1,0 +1,13 @@
+<%#
+  Heading of a centred public form panel: brand mark, title and a one-line subtitle.
+  Included by pages/login.ejs, pages/invite.ejs and pages/reset.ejs.
+  Locals: brand (app local); head: { icon (defaults to brand.icon), heading (defaults to brand.name), sub: subtitle text },
+  one object so nothing is inherited from the page.
+-%>
+<div class="panel-head">
+  <div class="brand-mark brand-mark-lg">
+    <%- include('../icon', { name: head.icon || brand.icon }) %>
+  </div>
+  <h1 class="text-[17px] font-semibold text-slate-900"><%= head.heading || brand.name %></h1>
+  <p class="mt-1 text-ui text-slate-500"><%= head.sub %></p>
+</div>

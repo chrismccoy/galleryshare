@@ -1,0 +1,18 @@
+<%#
+  One image's own page in a shared gallery (public layout, wide variant), for the "Image page" view
+  (domain/image-views.js): the image in the gallery's share theme, with Back to gallery, Previous and Next (disabled at
+  the ends; the arrow keys move too, public/js/image-page.js), Save and Copy image link (public/js/copy-link.js).
+  Rendered by GET /s/:token/i/:publicName (routes/pages/share.js). Shows nothing about the owner.
+  Locals:
+    title, meta: page chrome (meta carries the generic title and Open Graph title)
+    gallery, zipUrl: for partials/share-header.ejs
+    theme: the share theme key; the page is wrapped by partials/share-themes/<shareThemePartial(theme)>.ejs
+    counter: where the image is, e.g. 'Photo 3 of 24', shown between Back to gallery and Previous/Next (in every
+      theme, None too; the themes' photo count is left out here)
+    image: { title, caption, webUrl, download } (routes/view/share-view.js toShareImage)
+    nav: { prevUrl, nextUrl, galleryUrl } the neighbours' pages (null at either end) and the gallery page
+-%>
+<% const body = include('../partials/share-image-page', { imagePage: { image, nav, counter } }); %>
+<div class="mx-auto max-w-share">
+  <%- include('../partials/share-themes/' + shareThemePartial(theme), { shell: { theme, gallery, zipUrl, count: null, body } }) %>
+</div>

@@ -1,0 +1,51 @@
+<%#
+  Share panel of the gallery edit view (owner and admin alike, spec 6.4.1). No live link: a Share button (POST), disabled while public sharing is off. A live link: the
+  URL read-only with Copy (public/js/copy-link.js, loaded by the shell) and Revoke (inline Yes/No confirm,
+  public/js/inline-confirm.js); both stay while sharing is off so the link can still be killed. When the link
+  can no longer be derived (the app secret changed) the panel says so and offers only Revoke.
+  Included by pages/gallery-edit.ejs.
+  Locals:
+    gallery: galleries row (for the form actions)
+    share: { url, createdAt, reshowable } for the live link, or null; `url` is null when not reshowable
+    sharingOn: whether public sharing is on
+    pathTo: app.locals (config/urls.js PATH_TO); csrfToken (chrome local), for the forms
+-%>
+<div class="card" data-share-panel>
+  <div class="card-head">
+    <%- include('icon', { name: 'fa-solid fa-share-nodes', iconExtra: 'text-slate-400' }) %> <h2>Share link</h2>
+    <% if (share) { %><%- include('shared-pill', { pill: { extra: 'ml-auto' } }) %><% } %>
+  </div>
+  <div class="card-body space-y-3">
+    <%- include('sharing-off', { sharingOn }) %>
+    <% if (share) { %>
+      <% if (share.reshowable) { %>
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="share-url" class="sr-only">Share link</label>
+          <input id="share-url" type="text" readonly value="<%= share.url %>" class="field-input min-w-0 flex-1 basis-48 font-mono text-xs" data-share-url />
+          <%- include('copy-button', { url: share.url }) %>
+        </div>
+        <p class="text-sm text-slate-500">Anyone with this link can see this gallery. It doesn't expire.</p>
+      <% } else { %>
+        <p class="text-sm text-slate-600" data-share-unreshowable>This link can't be shown again. Revoke it and share again to get a new one.</p>
+      <% } %>
+      <div class="flex flex-wrap items-center gap-2" data-confirm>
+        <%- include('danger-confirm', { confirm: {
+              icon: 'fa-solid fa-link-slash', label: 'Revoke', tooltip: 'Revoke the share link',
+              action: pathTo.gallery(gallery.id, 'unshare'), prompt: 'Revoke this link? It stops working at once.',
+            } }) %>
+        <span class="text-xs text-slate-400">Shared <%= share.createdAt %></span>
+      </div>
+    <% } else { %>
+      <p class="text-sm text-slate-500">Not shared. Share to get a link anyone can open without signing in.</p>
+      <% if (sharingOn) { %>
+        <%- include('post-button', {
+              post: { action: pathTo.gallery(gallery.id, 'share'), label: 'Share', btn: 'btn-primary btn-sm', icon: 'fa-solid fa-share-nodes' },
+            }) %>
+      <% } else { %>
+        <button type="button" class="btn btn-primary btn-sm" disabled data-share-disabled>
+          <%- include('icon', { name: 'fa-solid fa-share-nodes' }) %> Share
+        </button>
+      <% } %>
+    <% } %>
+  </div>
+</div>

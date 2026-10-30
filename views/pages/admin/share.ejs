@@ -1,0 +1,46 @@
+<%#
+  One public share link with its facts and last 100 views (signed-in shell).
+  Rendered by GET /admin/shares/:id (routes/pages/admin/shares.js).
+  Locals:
+    title (chrome local)
+    share: { id, galleryId, owner, ownerEmail, gallery, shared, clicks, lastOpened, status: { text, tone }, url }
+      (url: absolute public link, or null when it can no longer be derived)
+    views: [{ when, kind, ip, userAgent }] newest first (kind: Page or ZIP; user-agent already shortened)
+    sharingOn: false shows the "turned off" banner
+    clicksNote: the approximate-clicks note over the views table (routes/pages/admin/shares.js)
+    csrfToken (chrome local)
+    paths: app.locals (config/urls.js PATHS), for links and form actions
+    pathTo: app.locals (config/urls.js PATH_TO), for the ones with an id, block or token
+-%>
+<%- include('../../partials/sharing-off', { sharingOn }) %>
+<p class="mb-3"><a href="<%= paths.admin.shares %>" class="text-sm underline">Back to Shared links</a></p>
+<section class="card mb-6">
+  <div class="card-head"><h2>Link</h2></div>
+  <div class="card-body">
+    <dl class="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+      <div><dt class="help">Owner</dt><dd><%= share.owner %> (<%= share.ownerEmail %>)</dd></div>
+      <div><dt class="help">Gallery</dt><dd><%= share.gallery %></dd></div>
+      <div><dt class="help">Shared</dt><dd><%= share.shared %></dd></div>
+      <div><dt class="help">Clicks</dt><dd><%= share.clicks %></dd></div>
+      <div><dt class="help">Last opened</dt><dd><%= share.lastOpened %></dd></div>
+      <div><dt class="help">Status</dt><dd><%- include('../../partials/pill', { pill: share.status }) %></dd></div>
+    </dl>
+    <div class="mt-4 flex flex-wrap items-center gap-1.5" data-confirm>
+      <%- include('../../partials/admin/share-view-link', { url: share.url }) %>
+      <a href="<%= pathTo.gallery(share.galleryId) %>" data-confirm-hide class="btn btn-quiet btn-sm">Edit gallery</a>
+      <%- include('../../partials/admin/share-revoke', { revoke: { id: share.id } }) %>
+    </div>
+  </div>
+</section>
+<section class="card">
+  <div class="card-head"><h2>Last 100 views</h2></div>
+  <p class="help px-4 pt-3"><%= clicksNote %></p>
+  <%- include('../../partials/data-table', {
+        table: {
+          columns: [{ label: 'Time' }, { label: 'Kind' }, { label: 'IP' }, { label: 'User-agent' }],
+          rows: views,
+          row: 'rows/share-view',
+          empty: { icon: 'fa-solid fa-link', text: 'No views recorded.' },
+        },
+      }) %>
+</section>

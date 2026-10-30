@@ -1,0 +1,8 @@
+<%#
+  The one image of a single-image shared gallery: partials/share-figure.ejs without Save (its web copy with title and
+  caption, and "Copy image link"); a click on the image opens it in a new tab.
+  Rendered by pages/share-single.ejs into a string that the share theme partial wraps.
+  Locals (one object, so nothing is inherited from the including page):
+    single: { image: { title, caption, webUrl } }
+-%>
+<%- include('share-figure', { figure: { image: single.image, save: false, imagePage: false } }) %>

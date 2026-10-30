@@ -1,0 +1,17 @@
+<%#
+  "Recent activity" card: the newest few events in the Activity pages' table (partials/activity-table.ejs), without filters or paging,
+  and a link to the full page. Included by pages/dashboard.ejs (the user's My activity) and pages/admin/overview.ejs
+  (every event, with the From column).
+  Locals (one object, so nothing is inherited from the including page):
+    recent: { rows, href, admin }
+      rows: [{ when, who, area, what, details, from }] from routes/view/activity-page.js toActivityRow
+      href: the full Activity page
+      admin: true adds the From column (IP · browser)
+-%>
+<section data-widget="activity" class="card mt-4">
+  <div class="card-head">
+    <h2>Recent activity</h2>
+    <a href="<%= recent.href %>" class="ml-auto text-xs text-brand-600 hover:underline">All activity</a>
+  </div>
+  <%- include('activity-table', { activityTable: { rows: recent.rows, admin: recent.admin } }) %>
+</section>

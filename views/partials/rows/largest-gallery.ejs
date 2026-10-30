@@ -1,0 +1,16 @@
+<%#
+  One row of the admin overview's largest galleries: title, owner, image count, size and Edit.
+  Rendered through partials/data-table.ejs by pages/admin/overview.ejs.
+  Locals: item: { id, title, owner, imageCount, size }; pathTo (app locals).
+-%>
+<tr data-largest-row>
+  <td><%= item.title %></td>
+  <td class="hidden sm:table-cell"><%= item.owner %></td>
+  <td class="hidden sm:table-cell"><%= item.imageCount %></td>
+  <td class="whitespace-nowrap"><%= item.size %></td>
+  <td class="text-right">
+    <a href="<%= pathTo.gallery(item.id) %>" class="btn btn-primary btn-sm">
+      <%- include('../icon', { name: 'fa-solid fa-pen' }) %> Edit
+    </a>
+  </td>
+</tr>

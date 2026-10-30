@@ -1,0 +1,124 @@
+<%#
+  Gallery edit view (signed-in shell), the same for the owner and an admin: details form, the image list
+  with drag-and-drop reorder (public/js/reorder.js), the share panel, add images, and Move to Trash.
+  Rendered by GET /dashboard/galleries/:id and by refused form posts on it (routes/pages/galleries.js, and
+  routes/pages/gallery-upload.js for a refused upload).
+  The route passes scripts: ['gallery-upload-rules', 'gallery-upload', 'reorder', 'save-bar'].
+  Locals:
+    title (chrome local): the gallery title or its default
+    gallery: galleries row
+    ownGallery: true when the signed-in user owns the gallery (an admin may be editing someone else's)
+    images: gallery_images rows in position order, each with position and defaultCaption
+    defaults: { galleryTitle, imageTitle, captionTemplate } placeholders for blank fields; captionTemplate
+      (domain/gallery.js DEFAULT_CAPTION_TEMPLATE) is rendered as data-caption-template for public/js/reorder.js
+    fieldMax: { title, description, caption } maxlength of the text fields (domain/limits.js GALLERY_FIELD_MAX)
+    The save bar (partials/save-bar.ejs, hidden until public/js/save-bar.js counts an unsaved change) is the only
+    "Save gallery" with JavaScript; without it, the Details card and the image list each show one instead.
+    The leave dialog (partials/leave-dialog.ejs) asks before a link or another form leaves the page with unsaved changes.
+    gridText: { choice, choices } the gallery's grid text choice ('default', 'show' or 'hide') and the buttons, "Site
+      default (Shown or Hidden)" first
+    theme: { choice, choices } the gallery's theme choice ('default' or a theme key) and the buttons
+      [{ value, label }] for partials/choice-buttons.ejs, "Site default (<site theme>)" first
+    imageView: { choice, choices } the gallery's image view choice ('default' or a view key) and its buttons, likewise
+    editedByAdmin: true when the last change was made by someone other than the owner
+    activeJob: the pending or running ingest job for this gallery, or null (partials/gallery-processing.ejs banner)
+    skipped: [{ name, reason, more? }] files the last finished job could not add (shown once), or []
+      (partials/gallery-skipped.ejs banner)
+    skippedTotal: how many files `skipped` stands for
+    share, sharingOn: for partials/gallery-share-panel.ejs
+    uploadAction, upload: for partials/gallery-upload-forms.ejs
+    notice, error: messages, shown through pageNotices (routes/view/respond.js) by partials/notices.ejs
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+    csrfToken (chrome local), for the forms
+-%>
+<% if (editedByAdmin) { %>
+  <p class="mb-4"><%- include('../partials/edited-by-admin-pill', { pill: {} }) %></p>
+<% } %>
+<%- include('../partials/notices', { notices: pageNotices }) %>
+<% if (activeJob) { %><%- include('../partials/gallery-processing', { job: activeJob }) %><% } %>
+<% if (skipped.length) { %><%- include('../partials/gallery-skipped', { skipped, skippedTotal }) %><% } %>
+
+<div class="grid gap-4 xl:grid-cols-3">
+  <div class="space-y-4 xl:col-span-2">
+    <div class="card">
+      <div class="card-head">
+        <%- include('../partials/icon', { name: 'fa-solid fa-pen', iconExtra: 'text-slate-400' }) %> <h2>Details</h2>
+      </div>
+      <form id="gallery-details" action="<%= pathTo.gallery(gallery.id, 'meta') %>" method="post" class="card-body">
+        <%- include('../partials/csrf-field') %>
+        <div class="mb-3.5">
+          <label for="gallery-title" class="field-label">Title</label>
+          <input id="gallery-title" name="title" type="text" maxlength="<%= fieldMax.title %>" value="<%= gallery.title ?? '' %>" placeholder="<%= defaults.galleryTitle %>" class="field-input" />
+        </div>
+        <div class="mb-3.5">
+          <label for="gallery-description" class="field-label">Description <span class="font-normal text-slate-400">(optional)</span></label>
+          <textarea id="gallery-description" name="description" rows="3" maxlength="<%= fieldMax.description %>" class="field-input"><%= gallery.description ?? '' %></textarea>
+        </div>
+        <div class="mb-3.5">
+          <%- include('../partials/toggle', { toggle: { name: 'allow_zip', title: 'Allow ZIP download', checked: Boolean(gallery.allow_zip), help: 'People with the link can download all images as one ZIP file.' } }) %>
+        </div>
+        <div class="mb-3.5">
+          <%- include('../partials/choice-buttons', { choiceSet: { name: 'grid_text', legend: 'Titles and captions on the grid', choices: gridText.choices, checked: gridText.choice, wrap: false, help: 'Under each thumbnail of the shared gallery. The lightbox always shows them.' } }) %>
+        </div>
+        <div class="mb-3.5">
+          <%- include('../partials/choice-buttons', { choiceSet: { name: 'share_theme', legend: 'Share theme', choices: theme.choices, checked: theme.choice, help: 'The look of this gallery\'s shared page. Site default follows the theme an admin picked.' } }) %>
+        </div>
+        <div class="mb-3.5">
+          <%- include('../partials/choice-buttons', { choiceSet: { name: 'share_image_view', legend: 'Image view', choices: imageView.choices, checked: imageView.choice, help: 'What a click on a thumbnail does: the lightbox, the image alone in a new tab, or a page of its own with Previous and Next.' } }) %>
+        </div>
+        <noscript>
+          <button type="submit" class="btn btn-primary">Save gallery</button>
+          <p class="help">Also saves the image titles and captions you changed below.</p>
+        </noscript>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <%- include('../partials/icon', { name: 'fa-solid fa-table-cells', iconExtra: 'text-slate-400' }) %> <h2>Images</h2>
+        <span class="pill"><%= images.length %></span>
+        <span class="help ml-auto mt-0 font-normal">Drag to reorder, or use Up and Down.</span>
+      </div>
+      <div class="notice notice-error mx-4 mt-4" role="alert" data-reorder-notice hidden>
+        <%- include('../partials/icon', { name: 'fa-solid fa-circle-exclamation' }) %>
+        <span data-reorder-notice-text></span>
+      </div>
+      <% if (images.length) { %>
+        <ol class="divide-y divide-slate-100" data-reorder-list data-reorder-url="<%= pathTo.gallery(gallery.id, 'reorder') %>" data-caption-template="<%= defaults.captionTemplate %>">
+          <% images.forEach(function (image) { %>
+            <%- include('../partials/gallery-image-row', { image, defaultTitle: defaults.imageTitle, fieldMax }) %>
+          <% }); %>
+        </ol>
+        <noscript>
+          <div class="flex justify-end border-t border-slate-200 px-4 py-3">
+            <button type="submit" form="gallery-details" class="btn btn-primary">Save gallery</button>
+          </div>
+        </noscript>
+      <% } else { %>
+        <div class="card-empty">No images yet. Add some with the forms on this page.</div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <%- include('../partials/gallery-share-panel', { gallery, share, sharingOn }) %>
+    <section aria-labelledby="add-images-heading">
+      <h2 id="add-images-heading" class="mb-2 text-ui font-semibold text-slate-900">Add images</h2>
+      <%- include('../partials/gallery-upload-forms', { uploadAction, upload }) %>
+    </section>
+
+    <div class="card">
+      <div class="card-head">
+        <%- include('../partials/icon', { name: 'fa-regular fa-trash-can', iconExtra: 'text-slate-400' }) %> <h2>Delete</h2>
+      </div>
+      <div class="card-body">
+        <p class="mb-3 text-sm text-slate-500">The gallery moves to <%= ownGallery ? 'your' : "the owner's" %> Trash and its links stop working. It can be restored from Trash.</p>
+        <div class="flex flex-wrap items-center gap-2" data-confirm>
+          <%- include('../partials/danger-confirm', { confirm: { icon: 'fa-regular fa-trash-can', label: 'Move to Trash', action: pathTo.gallery(gallery.id, 'delete'), prompt: 'Move this gallery to Trash?' } }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/save-bar', { saveBar: { form: 'gallery-details', label: 'Save gallery' } }) %>

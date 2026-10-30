@@ -1,0 +1,13 @@
+<%#
+  Share themes drawn as one styled panel around the heading and the body: Frame, Dark wall, Polaroid, Glass and Paper
+  stack. The look is all in their .share-theme-<key> styles (src/share-themes.css); None and App window have partials
+  of their own (domain/share-themes.js shareThemePartial picks).
+  Included by pages/share.ejs, pages/share-single.ejs and pages/share-image.ejs.
+  Locals (one object, so nothing is inherited from the including page):
+    shell: { theme, gallery, zipUrl, count, body }: the theme key, the page heading values, the photo count text and
+      the rendered page body
+-%>
+<section class="share-shell share-theme-<%= shell.theme %>" data-share-theme="<%= shell.theme %>">
+  <%- include('../share-header', { header: { gallery: shell.gallery, zipUrl: shell.zipUrl, count: shell.count, titleShown: true } }) %>
+  <%- shell.body %>
+</section>

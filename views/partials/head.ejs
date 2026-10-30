@@ -1,0 +1,36 @@
+<%#
+  Opens the HTML document: doctype, <head> (meta tags, title, icon, stylesheets) and the opening <body> tag.
+  Included first by both layouts (layouts/shell.ejs and layouts/public.ejs).
+  Locals:
+    title: page title; the tab shows "<title> · <brand.name>"
+    csrfToken: written to the csrf-token meta tag ('' when absent)
+    refreshSeconds: optional number; adds a meta refresh (the ingest job page uses it while images are being added)
+    brand: { name, icon } from app.locals
+    pathTo: app.locals (config/urls.js PATH_TO), for the asset paths
+    meta: optional { title, description }; used only by the public share pages. Replaces the whole <title>,
+          adds an og:title with the same text, and a description and og:description with `description`
+          (generic text and no image, so a link preview shows nothing about the gallery)
+-%>
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="<%= locals.csrfToken ?? '' %>" />
+  <meta name="robots" content="noindex, nofollow" />
+  <% if (locals.refreshSeconds) { %>
+    <meta http-equiv="refresh" content="<%= refreshSeconds %>" />
+  <% } %>
+  <% if (locals.meta) { %>
+    <meta property="og:title" content="<%= meta.title %>" />
+    <meta name="description" content="<%= meta.description %>" />
+    <meta property="og:description" content="<%= meta.description %>" />
+    <title><%= meta.title %></title>
+  <% } else { %>
+    <title><%= title %> · <%= brand.name %></title>
+  <% } %>
+  <link rel="icon" href="<%= pathTo.asset('favicon.svg') %>" type="image/svg+xml" />
+  <link rel="stylesheet" href="<%= pathTo.asset('vendor/fontawesome/css/all.min.css') %>" />
+  <link rel="stylesheet" href="<%= pathTo.asset('css/app.css') %>" />
+</head>
+<body class="h-full bg-slate-100 text-slate-800">

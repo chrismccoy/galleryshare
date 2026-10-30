@@ -1,0 +1,35 @@
+<%#
+  Dark desktop sidebar of the signed-in shell: brand link, grouped navigation and a Log out form.
+  Included by layouts/shell.ejs (hidden below the lg breakpoint; partials/topbar.ejs has the mobile nav).
+  Locals: nav (groups of { title, links: [{ href, label, icon, on, badge, count }] }, built per request by
+  routes/middleware/request-locals.js: `on` marks the active link, `count` is the badge number, `badge` its data hook key), csrfToken, brand.
+  paths (app locals, config/urls.js): page paths for links and form actions
+-%>
+<%# In the page flow, not position: fixed, so the dark column stretches with the shell to the full page height; the inner box sticks to the viewport so the nav stays in view. %>
+<aside class="hidden w-sidebar shrink-0 bg-slate-900 text-slate-300 lg:block" data-sidebar>
+  <div class="sticky top-0 flex h-screen flex-col">
+    <a href="<%= paths.front %>" class="flex h-16 items-center gap-2.5 border-b border-white/5 px-5">
+      <span class="brand-mark brand-mark-md">
+        <%- include('icon', { name: brand.icon }) %>
+      </span>
+      <span class="text-base font-semibold text-white"><%= brand.name %></span>
+    </a>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-3.5 text-sm" aria-label="Main">
+      <% nav.forEach(function (group) { %>
+        <p class="px-3 pb-1.5 pt-3.5 text-[10.5px] font-semibold uppercase tracking-[0.09em] text-slate-500"><%= group.title %></p>
+        <% group.links.forEach(function (link) { %>
+          <a href="<%= link.href %>"<% if (link.on) { %> aria-current="page"<% } %> class="flex items-center gap-3 rounded-lg px-3 py-2 <%= link.on ? 'bg-brand-600 font-medium text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white' %>">
+            <span class="w-4 text-center text-ui <%= link.on ? 'text-white' : 'text-slate-400' %>"><%- include('icon', { name: link.icon }) %></span>
+            <span><%= link.label %></span>
+            <% if (link.count > 0) { %><span class="ml-auto rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums <%= link.on ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-200' %>" data-nav-count="<%= link.badge %>"><%= link.count %></span><% } %>
+          </a>
+        <% }); %>
+      <% }); %>
+    </nav>
+
+    <div class="border-t border-white/5 p-3">
+      <%- include('logout-form', { variant: 'sidebar' }) %>
+    </div>
+  </div>
+</aside>

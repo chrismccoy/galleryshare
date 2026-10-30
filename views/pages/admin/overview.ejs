@@ -1,0 +1,31 @@
+<%#
+  Admin overview: site statistics, the largest galleries and the newest Admin → Activity entries (signed-in shell).
+  Rendered by GET /admin (routes/pages/admin/overview.js).
+  Locals:
+    title (chrome local)
+    tiles: KPI tiles for partials/kpi-card.ejs, from toKpiTiles
+    largest: [{ id, title, owner, imageCount, size }] top galleries by storage, from toLargestRows
+    activity: up to 5 activity rows, every user's (routes/view/activity-page.js toActivityRow)
+    paths: app.locals (config/urls.js PATHS), for the All activity link
+    pathTo: app.locals (config/urls.js PATH_TO), for the Edit links
+-%>
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <% tiles.forEach(function (tile) { %>
+    <%- include('../../partials/kpi-card', tile) %>
+  <% }); %>
+</div>
+<section class="card mt-6">
+  <div class="card-head"><h2>Largest galleries</h2></div>
+  <%- include('../../partials/data-table', {
+        table: {
+          columns: [
+            { label: 'Gallery' }, { label: 'Owner', class: 'hidden sm:table-cell' }, { label: 'Images', class: 'hidden sm:table-cell' },
+            { label: 'Size' }, { label: 'Actions', srOnly: true, class: 'text-right' },
+          ],
+          rows: largest,
+          row: 'rows/largest-gallery',
+          empty: { icon: 'fa-solid fa-images', text: 'No galleries yet.' },
+        },
+      }) %>
+</section>
+<%- include('../../partials/recent-activity', { recent: { rows: activity, href: paths.admin.activity, admin: true } }) %>

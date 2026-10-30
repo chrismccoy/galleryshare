@@ -1,0 +1,49 @@
+<%#
+  User page: profile details and account actions (reset link, enable/disable, delete, role).
+  Included by pages/admin/user.ejs. Which actions show is decided by accountActions in
+  domain/accounts.js (none for the .env admin; on your own account Disable, Delete and the role
+  form are hidden and a note says why).
+  Locals (passed explicitly by pages/admin/user.ejs): target, accountStatus (the status pill), joined;
+  canResetLink, canEnable, canDisable, canDelete, canChangeRole,
+  ownAccountNote (accountActions). csrfToken (chrome local)
+  pathTo (app locals, config/urls.js PATH_TO): URL builders for links and form actions
+-%>
+<section class="card" data-widget="profile">
+  <div class="card-head"><h2>Profile</h2></div>
+  <div class="card-body text-sm">
+    <dl class="grid grid-cols-[8rem_1fr] gap-y-2">
+      <dt class="text-slate-500">Name</dt><dd><%= target.display_name %></dd>
+      <dt class="text-slate-500">Email</dt><dd><%= target.email %></dd>
+      <dt class="text-slate-500">Role</dt><dd class="capitalize"><%= target.role %></dd>
+      <dt class="text-slate-500">Status</dt><dd><%- include('../pill', { pill: accountStatus }) %></dd>
+      <dt class="text-slate-500">Joined</dt><dd><%= joined %></dd>
+    </dl>
+    <% if (canResetLink) { %>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <%- include('../post-button', { post: { action: pathTo.adminUser(target.id, 'reset-link'), label: 'Generate reset link', btn: 'btn-quiet btn-sm' } }) %>
+        <% if (canEnable) { %>
+          <%- include('../post-button', { post: { action: pathTo.adminUser(target.id, 'enable'), label: 'Enable account', btn: 'btn-quiet btn-sm' } }) %>
+        <% } %>
+        <% if (canDisable) { %>
+          <%- include('../post-button', { post: { action: pathTo.adminUser(target.id, 'disable'), label: 'Disable account', btn: 'btn-quiet btn-sm' } }) %>
+        <% } %>
+        <% if (canDelete) { %>
+          <a href="<%= pathTo.adminUser(target.id, 'delete') %>" class="btn btn-danger btn-sm">Delete user</a>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (ownAccountNote) { %>
+      <p class="help mt-4" data-own-account>This is your account: you can't disable it, change its role or delete it here.</p>
+    <% } %>
+    <% if (canChangeRole) { %>
+      <form action="<%= pathTo.adminUser(target.id, 'role') %>" method="post" class="mt-4 flex items-end gap-2">
+        <%- include('../csrf-field') %>
+        <div>
+          <label for="role" class="field-label">Role</label>
+          <%- include('role-select', { roleSelect: { selected: target.role } }) %>
+        </div>
+        <button type="submit" class="btn btn-quiet btn-sm">Change role</button>
+      </form>
+    <% } %>
+  </div>
+</section>

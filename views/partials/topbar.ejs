@@ -1,0 +1,30 @@
+<%#
+  Top bar of the signed-in shell: brand link on small screens, Add gallery button,
+  account link, and below the lg breakpoint a horizontal nav strip with a Log out form.
+  Included by layouts/shell.ejs after partials/sidebar.ejs.
+  Locals: user (role, display_name), avatarInitial (routes/middleware/request-locals.js), nav (links with on, badge
+  and count, as in partials/sidebar.ejs), csrfToken, brand.
+  paths (app locals, config/urls.js): page paths for links and form actions
+-%>
+<header class="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/80 px-4 backdrop-blur sm:px-6">
+  <a href="<%= paths.front %>" class="flex items-center gap-2 text-[15px] font-semibold text-slate-900 lg:hidden">
+    <%- include('icon', { name: brand.icon, iconExtra: 'text-brand-600' }) %> <%= brand.name %>
+  </a>
+
+  <span class="flex-1"></span>
+
+  <a href="<%= paths.newGallery %>" class="btn btn-primary">
+    <%- include('icon', { name: 'fa-solid fa-images' }) %> Add gallery
+  </a>
+  <a href="<%= paths.account %>" class="hidden items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1 pr-2.5 text-sm text-slate-600 hover:bg-slate-50 sm:flex">
+    <span class="grid h-6 w-6 place-items-center rounded-full bg-brand-600 text-[11px] font-semibold text-white"><%= avatarInitial %></span>
+    <%= user.display_name %>
+  </a>
+</header>
+
+<nav class="flex flex-nowrap items-center gap-1 overflow-x-auto whitespace-nowrap border-b border-slate-200 bg-white px-4 py-2 text-sm lg:hidden" aria-label="Main">
+  <% nav.flatMap((group) => group.links).forEach(function (link) { %>
+    <a href="<%= link.href %>" class="rounded px-2 py-1 <%= link.on ? 'font-medium text-brand-600' : 'text-slate-500' %>"<% if (link.on) { %> aria-current="page"<% } %>><%= link.label %><% if (link.count > 0) { %> <span class="pill ml-0.5 px-1.5" data-nav-count-mobile="<%= link.badge %>"><%= link.count %></span><% } %></a>
+  <% }); %>
+  <%- include('logout-form', { variant: 'topbar' }) %>
+</nav>

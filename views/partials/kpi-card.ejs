@@ -1,0 +1,39 @@
+<%#
+  Small statistic card: label, tinted icon, big value and a help line. Included by pages/dashboard.ejs
+  and pages/admin/overview.ejs.
+  Locals:
+    label: card label
+    value: the number or text shown large
+    help: line under the value
+    stat: the statistic's name (also the data-stat test hook); picks the icon from KPI_ICONS
+    tone: 'brand' | 'green' | 'amber' | 'sky', the icon tile's colour (KPI_TONES)
+  The routes pass names only; the icon and colour classes live here, where Tailwind's view scan sees them. An
+  unknown stat or tone throws, so the mistake shows as an error page rather than a card with an `undefined` class.
+-%>
+<% const KPI_ICONS = {
+     users: 'fa-solid fa-users',
+     admins: 'fa-solid fa-user-shield',
+     galleries: 'fa-solid fa-table-cells',
+     images: 'fa-solid fa-images',
+     'avg-images': 'fa-solid fa-chart-simple',
+     storage: 'fa-solid fa-hard-drive',
+     shares: 'fa-solid fa-link',
+     trashed: 'fa-regular fa-trash-can',
+   };
+   const KPI_TONES = {
+     brand: 'bg-brand-500/10 text-brand-600',
+     green: 'bg-emerald-500/10 text-emerald-600',
+     amber: 'bg-amber-500/10 text-amber-600',
+     sky: 'bg-sky-500/10 text-sky-600',
+   };
+   // An unknown name is a bug in the route: fail loudly (the page render goes to the error handler).
+   if (!KPI_ICONS[stat]) throw new Error(`kpi-card: unknown stat "${stat}"`);
+   if (!KPI_TONES[tone]) throw new Error(`kpi-card: unknown tone "${tone}"`); -%>
+<section class="card p-4" data-stat="<%= stat %>">
+  <div class="flex items-start justify-between gap-3">
+    <p class="kpi-label"><%= label %></p>
+    <span class="grid h-8 w-8 place-items-center rounded-lg text-sm <%= KPI_TONES[tone] %>"><%- include('icon', { name: KPI_ICONS[stat] }) %></span>
+  </div>
+  <p class="kpi-value"><%= value %></p>
+  <p class="help"><%= help %></p>
+</section>

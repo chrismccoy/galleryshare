@@ -1,0 +1,18 @@
+<%#
+  The "Leave without saving?" dialog of the pages with a save bar (included by partials/save-bar.ejs). Hidden until
+  public/js/save-bar.js opens it: when there are unsaved changes and a link or another form (Sign out, Delete,
+  Move to Trash, an upload…) would leave the page. Stay (also Esc or a click beside the box) keeps the edits; Leave
+  without saving follows the click. Reload, closing the tab, Back and typed addresses still get the browser's own
+  question, which no page can replace.
+  Locals: none.
+-%>
+<dialog class="dialog" data-leave-dialog aria-labelledby="leave-dialog-title" aria-describedby="leave-dialog-text">
+  <h2 id="leave-dialog-title" class="flex items-center gap-2 text-base font-semibold text-slate-900">
+    <%- include('icon', { name: 'fa-solid fa-triangle-exclamation', iconExtra: 'text-amber-500' }) %> Leave without saving?
+  </h2>
+  <p id="leave-dialog-text" class="mt-2 text-sm text-slate-600" data-leave-dialog-text>Your unsaved changes will be lost.</p>
+  <div class="mt-5 flex flex-wrap justify-end gap-2">
+    <button type="button" class="btn btn-quiet" data-leave-stay autofocus>Stay on this page</button>
+    <button type="button" class="btn btn-danger" data-leave-go>Leave without saving</button>
+  </div>
+</dialog>

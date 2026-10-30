@@ -1,0 +1,17 @@
+<%#
+  The save bar: pinned to the bottom of the window, hidden until public/js/save-bar.js counts an unsaved change in the
+  form it names, then "N unsaved changes", Discard and the form's Save button. Also includes the "Leave without
+  saving?" dialog (partials/leave-dialog.ejs) the script opens. The page passes 'save-bar' in its scripts and keeps
+  its own Save button in <noscript>, for browsers without the script.
+  Included by pages/gallery-edit.ejs and pages/admin/settings.ejs.
+  Locals (one object, so nothing is inherited from the including page):
+    saveBar: { form, label }
+      form: the id of the form the bar saves
+      label: the Save button's text, e.g. 'Save gallery'
+-%>
+<div class="save-bar" role="region" aria-label="Unsaved changes" data-save-bar="<%= saveBar.form %>" hidden>
+  <span class="save-bar-count" data-save-bar-count aria-live="polite"></span>
+  <button type="button" class="btn btn-quiet" data-save-bar-discard>Discard</button>
+  <button type="submit" form="<%= saveBar.form %>" class="btn btn-primary"><%= saveBar.label %></button>
+</div>
+<%- include('leave-dialog') %>

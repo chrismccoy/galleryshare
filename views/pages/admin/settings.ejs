@@ -1,0 +1,85 @@
+<%#
+  Admin settings: override switches, sharing and items per page, plus what is in effect now (signed-in shell).
+  Rendered by GET and POST /admin/settings (routes/pages/admin/settings.js).
+  Locals:
+    title, csrfToken (chrome locals); notice, error (see partials/notices.ejs)
+    pageSize: "In effect now" items per page, { value, sourceLabel }
+    switches: [{ name, title, help, checked }] rendered with partials/toggle.ejs
+    publicSharing: boolean state of the "Public share links" switch
+    shareGridText: boolean state of the "Titles and captions on the gallery grid" switch
+    shareGridTextInEffect: the grid text in force with its source, e.g. 'Hidden (.env)'
+    shareThemeChoices: [{ value, label }] the theme buttons (domain/share-themes.js); shareTheme: the saved theme key (shown checked)
+    shareThemeInEffect: the share theme in force with its source, e.g. 'Frame (.env)'
+    imageViewChoices: [{ value, label }] the view buttons (domain/image-views.js); shareImageView: the saved view key (shown checked)
+    shareImageViewInEffect: the image view in force with its source, e.g. 'Lightbox (.env)'
+    limits: [{ name, label, field, min, max, value, effective: { value, sourceLabel } }] upload limits
+    itemsPerPage: the items-per-page field value (the .env value when none saved); pageRange: { min, max }
+    paths: app.locals (config/urls.js PATHS), for links and form actions
+  The route passes scripts: ['save-bar']. The save bar (partials/save-bar.ejs, hidden until public/js/save-bar.js
+  counts an unsaved change) is the only "Save settings" with JavaScript; without it the form shows its own button.
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <form id="settings-form" action="<%= paths.admin.settings %>" method="post" class="space-y-6 lg:col-span-2" autocomplete="off">
+    <%- include('../../partials/csrf-field') %>
+    <section class="card">
+      <div class="card-head"><h2>Override switches</h2></div>
+      <div class="card-body space-y-4">
+        <% switches.forEach(function (toggle) { %>
+          <%- include('../../partials/toggle', { toggle }) %>
+        <% }); %>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Sharing</h2></div>
+      <div class="card-body space-y-4">
+        <%- include('../../partials/toggle', { toggle: { name: 'public_sharing', title: 'Public share links', help: 'Turn off to make every share link stop working. Links are kept and work again when you turn it back on.', checked: publicSharing } }) %>
+        <%- include('../../partials/toggle', { toggle: { name: 'share_grid_text', title: 'Titles and captions on the gallery grid', help: 'Turn off to show only thumbnails on a shared gallery; the lightbox and single-image galleries still show them. Used only while "Use custom grid text setting" is on. Each gallery can override it in its Details.', checked: shareGridText } }) %>
+        <%- include('../../partials/choice-buttons', { choiceSet: { name: 'share_theme', legend: 'Share theme', choices: shareThemeChoices, checked: shareTheme, help: 'The look of shared gallery pages. Used only while "Use custom share theme" is on. Each gallery can override it in its Details.' } }) %>
+        <%- include('../../partials/choice-buttons', { choiceSet: { name: 'share_image_view', legend: 'Image view', choices: imageViewChoices, checked: shareImageView, help: 'What a click on a thumbnail of a shared gallery does: the lightbox, the image alone in a new tab, or a page of its own with Previous and Next. Used only while "Use custom image view" is on. Each gallery can override it in its Details.' } }) %>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Lists</h2></div>
+      <div class="card-body">
+        <label for="items_per_page" class="field-label">Items per page</label>
+        <input id="items_per_page" name="items_per_page" type="number" inputmode="numeric" min="<%= pageRange.min %>" max="<%= pageRange.max %>" step="1" value="<%= itemsPerPage %>" class="field-input w-32" />
+        <p class="help">Galleries, Trash and Shared links. <%= pageRange.min %> to <%= pageRange.max %>; used only while "Use custom items per page" is on.</p>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Upload limits</h2></div>
+      <div class="card-body space-y-4">
+        <% limits.forEach(function (limit) { %>
+          <div>
+            <label for="<%= limit.field %>" class="field-label"><%= limit.label %></label>
+            <input id="<%= limit.field %>" name="<%= limit.field %>" type="number" inputmode="numeric" min="<%= limit.min %>" max="<%= limit.max %>" step="1" value="<%= limit.value %>" class="field-input w-40" />
+            <p class="help"><%= limit.min %> to <%= limit.max %>; used only while its "Use custom" switch is on.</p>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+    <noscript><button type="submit" class="btn btn-primary">Save settings</button></noscript>
+  </form>
+
+  <section class="card h-fit" data-widget="status">
+    <div class="card-head"><h2>In effect now</h2></div>
+    <div class="card-body text-sm">
+      <dl class="grid grid-cols-[7rem_1fr] gap-y-2">
+        <dt class="text-slate-500">Items per page</dt>
+        <dd data-items-per-page><%= pageSize.value %> (<%= pageSize.sourceLabel %>)</dd>
+        <% limits.forEach(function (limit) { %>
+          <dt class="text-slate-500"><%= limit.label %></dt>
+          <dd data-limit="<%= limit.name %>"><%= limit.effective.value %> (<%= limit.effective.sourceLabel %>)</dd>
+        <% }); %>
+        <dt class="text-slate-500">Grid titles and captions</dt>
+        <dd data-share-grid-text><%= shareGridTextInEffect %></dd>
+        <dt class="text-slate-500">Share theme</dt>
+        <dd data-share-theme><%= shareThemeInEffect %></dd>
+        <dt class="text-slate-500">Image view</dt>
+        <dd data-share-image-view><%= shareImageViewInEffect %></dd>
+      </dl>
+    </div>
+  </section>
+</div>
+<%- include('../../partials/save-bar', { saveBar: { form: 'settings-form', label: 'Save settings' } }) %>

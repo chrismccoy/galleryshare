@@ -1,0 +1,9 @@
+<%#
+  The Revoke button of a shared link, with its inline confirm (partials/danger-confirm.ejs).
+  Included by pages/admin/share.ejs and partials/rows/admin-share.ejs, so both offer the same revoke.
+  Locals: revoke: { id } the share id; pathTo (app local).
+-%>
+<%- include('../danger-confirm', { confirm: {
+      icon: 'fa-solid fa-ban', label: 'Revoke', tooltip: 'Revoke link',
+      action: pathTo.adminShare(revoke.id, 'revoke'), prompt: 'Revoke this link?',
+    } }) %>

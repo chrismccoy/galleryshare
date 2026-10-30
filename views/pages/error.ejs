@@ -1,0 +1,18 @@
+<%#
+  Generic error page in the public layout.
+  Rendered by the error handler (routes/middleware/errors.js), by the CSRF refusal (routes/middleware/csrf.js, "Form expired") and
+  by the share rate limits (routes/middleware/share-limits.js, 429).
+  Locals:
+    title: heading
+    message: explanation text
+    user: signed-in user or undefined (changes the back link)
+    link: optional { href, label, icon } replacing the back link
+    backLink: app.locals (routes/view/app-locals.js), the back link for `user`
+-%>
+    <%- include('../partials/state-panel', { state: {
+          tone: 'red',
+          icon: 'fa-solid fa-circle-exclamation',
+          heading: title,
+          help: message,
+          link: locals.link ?? { ...backLink(locals.user), icon: 'fa-solid fa-arrow-left' },
+        } }) %>

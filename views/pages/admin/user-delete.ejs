@@ -1,0 +1,31 @@
+<%#
+  Confirmation page for deleting a user (signed-in shell).
+  Rendered by GET /admin/users/:id/delete (routes/pages/admin/users.js).
+  Locals:
+    title, csrfToken (chrome locals)
+    target: the user row to delete
+    isSelf: true when the admin is looking at their own account (deletion refused)
+    managedByEnv: true for the .env admin (deletion refused)
+    ownAccountMessage: refusal shown when isSelf (domain/accounts.js OWN_ACCOUNT.remove)
+    envAdminMessage: refusal shown when managedByEnv (domain/accounts.js ENV_ADMIN_DELETE_MESSAGE)
+    error: always null here
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+-%>
+<div class="card max-w-lg">
+  <div class="card-head"><h2>Delete <%= target.display_name %>?</h2></div>
+  <div class="card-body">
+    <p class="mb-4 text-sm text-slate-600">This permanently deletes <%= target.email %>, their galleries and images. It cannot be undone.</p>
+    <% if (isSelf) { %>
+      <%- include('../../partials/notices', { notices: { error: ownAccountMessage } }) %>
+    <% } else if (managedByEnv) { %>
+      <%- include('../../partials/notices', { notices: { error: envAdminMessage } }) %>
+      <a href="<%= pathTo.adminUser(target.id) %>" class="btn btn-quiet">Back</a>
+    <% } else { %>
+      <form action="<%= pathTo.adminUser(target.id, 'delete') %>" method="post" class="flex gap-2">
+        <%- include('../../partials/csrf-field') %>
+        <button type="submit" class="btn btn-danger">Delete permanently</button>
+        <a href="<%= pathTo.adminUser(target.id) %>" class="btn btn-quiet">Cancel</a>
+      </form>
+    <% } %>
+  </div>
+</div>

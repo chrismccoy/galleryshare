@@ -1,0 +1,20 @@
+<%#
+  One live share link in the admin Shared links list, with View, Details and Revoke (inline confirm).
+  Rendered through partials/data-table.ejs by pages/admin/shares.ejs.
+  Locals: item: { id, owner, gallery, shared, clicks, lastOpened, status: { text, tone }, url }; pathTo (app locals).
+-%>
+<tr data-share-row>
+  <td><%= item.owner %></td>
+  <td><%= item.gallery %></td>
+  <td><%= item.shared %></td>
+  <td><%= item.clicks %></td>
+  <td><%= item.lastOpened %></td>
+  <td><%- include('../pill', { pill: item.status }) %></td>
+  <td>
+    <div class="flex flex-wrap items-center justify-end gap-1.5" data-confirm>
+      <%- include('../admin/share-view-link', { url: item.url }) %>
+      <a href="<%= pathTo.adminShare(item.id) %>" data-confirm-hide class="btn btn-quiet btn-sm">Details</a>
+      <%- include('../admin/share-revoke', { revoke: { id: item.id } }) %>
+    </div>
+  </td>
+</tr>

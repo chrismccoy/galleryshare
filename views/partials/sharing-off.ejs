@@ -1,0 +1,12 @@
+<%#
+  Banner shown while public share links are turned off in Settings.
+  Included by partials/gallery-share-panel.ejs (edit view, owner and admin), pages/admin/shares.ejs and
+  pages/admin/share.ejs.
+  Locals: sharingOn: false shows the banner; true renders nothing.
+-%>
+<% if (!sharingOn) { %>
+  <div class="notice notice-error" role="alert" data-sharing-off>
+    <%- include('icon', { name: 'fa-solid fa-circle-exclamation' }) %>
+    <span>Public share links are turned off in Settings. These links don't work until it's turned back on.</span>
+  </div>
+<% } %>

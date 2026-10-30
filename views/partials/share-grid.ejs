@@ -1,0 +1,21 @@
+<%#
+  The card grid of a shared gallery: one partials/share-card.ejs per image, square thumbnails. Rendered by
+  pages/share.ejs into a string that the share theme partial (partials/share-themes/*.ejs) wraps.
+  Locals (one object, so nothing is inherited from the including page):
+    grid: { images, showText, view }
+      images: [{ title, caption, position, thumbUrl, webUrl, pageUrl, download }] in gallery order
+      showText: whether the cards show the title and caption under the thumbnail
+      view: the image view (domain/image-views.js): 'page' links each card to the image's own page in the same tab;
+        'lightbox' and 'new-tab' link the large image in a new tab (the lightbox script takes the click over)
+-%>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-share-grid>
+  <% grid.images.forEach(function (image) { %>
+    <%- include('share-card', {
+          card: {
+            href: grid.view === 'page' ? image.pageUrl : image.webUrl, newTab: grid.view !== 'page',
+            thumbUrl: image.thumbUrl, title: image.title, caption: image.caption,
+            position: image.position, download: image.download, aspect: 'aspect-square', showText: grid.showText,
+          },
+        }) %>
+  <% }); %>
+</div>

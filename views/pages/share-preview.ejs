@@ -1,0 +1,14 @@
+<%#
+  Bare stub of a live shared gallery for link-preview bots and crawlers: the generic heading and the generic
+  description, and nothing about the gallery (no title, images or captions).
+  Rendered by GET /s/:token (routes/pages/share.js) with status 200 when the User-Agent is a preview bot.
+  Locals:
+    title: the generic share title, shown as the heading
+    meta: generic page meta (see partials/head.ejs); its description is shown under the heading
+-%>
+    <%- include('../partials/state-panel', { state: {
+          tone: 'slate',
+          icon: 'fa-solid fa-link',
+          heading: title,
+          help: meta.description,
+        } }) %>

@@ -1,0 +1,27 @@
+<%#
+  A set of choice buttons: one radio button per choice, shown as segmented buttons (wrapping onto more lines unless `wrap` is
+  false). Used for every choice a gallery can override and its site value: share theme, image view and grid text.
+  Included by pages/admin/settings.ejs (the site values: the options) and pages/gallery-edit.ejs (a gallery's own:
+  Site default, then the options; its radios belong to the Details form). The buttons come from the route
+  (domain/gallery-choice.js siteDefaultChoices and optionButtons), so no view builds them.
+  Locals (one object, so nothing is inherited from the including page):
+    choiceSet: { name, legend, choices, checked, help?, wrap? }
+      name: radio name ('share_theme', 'share_image_view' or 'grid_text'); also the data-choice-buttons hook
+      legend: fieldset legend
+      choices: [{ value, label }] in display order
+      checked: the value to check
+      help: optional help text under the buttons
+      wrap: false for one joined row of buttons (default true)
+-%>
+<fieldset data-choice-buttons="<%= choiceSet.name %>">
+  <legend class="field-label"><%= choiceSet.legend %></legend>
+  <div class="segmented<%= choiceSet.wrap === false ? '' : ' segmented-wrap' %>">
+    <% choiceSet.choices.forEach(function (choice) { %>
+      <label class="segmented-option">
+        <input type="radio" name="<%= choiceSet.name %>" value="<%= choice.value %>" class="peer sr-only"<% if (choiceSet.checked === choice.value) { %> checked<% } %> />
+        <span><%= choice.label %></span>
+      </label>
+    <% }); %>
+  </div>
+  <% if (choiceSet.help) { %><p class="help"><%= choiceSet.help %></p><% } %>
+</fieldset>

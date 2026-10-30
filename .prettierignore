@@ -1,0 +1,12 @@
+node_modules/
+public/vendor/
+public/screenshots/
+public/css/
+data/
+test-results/
+playwright-report/
+*.md
+*.ejs
+*.html
+*.css
+*.json

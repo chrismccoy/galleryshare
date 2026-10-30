@@ -1,0 +1,9 @@
+<%#
+  The empty state of a shared gallery with no images yet. Rendered by pages/share-single.ejs into a string that the
+  share theme partial wraps.
+  Locals (one object, so nothing is inherited from the including page):
+    empty: { text }
+-%>
+<div class="card">
+  <%- include('empty-state', { empty: { icon: 'fa-regular fa-images', text: empty.text } }) %>
+</div>

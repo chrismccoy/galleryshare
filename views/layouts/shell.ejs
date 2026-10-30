@@ -1,0 +1,36 @@
+<%#
+  The signed-in page shell (dashboard and admin pages): document head, sidebar, top bar, <main> with the page
+  heading row, the page body, then the scripts and the document end. Every tag it opens it closes here.
+  Rendered by renderInShell (routes/view/respond.js) around a page view that was rendered first, so the page view
+  holds only its content.
+  Locals:
+    page: { body, actions } from renderInShell: the rendered page view (trusted server HTML) and the rendered
+      heading actions (a partial under partials/head-actions/, or '')
+    title: the <h1> and tab title
+    hero: optional { icon (a name from partials/page-hero.ejs), lead }: the heading is drawn as a compact hero card (partials/page-hero.ejs) instead of
+      the plain heading row; heading actions are not shown with it
+    scripts: string[] of classic scripts under /js: renderInShell puts the shell scripts that shared partials depend
+      on (SHELL_SCRIPTS: inline-confirm, copy-link, dismiss) before the page's own, e.g. ['gallery-upload', 'reorder']
+    the chrome locals needed by head, sidebar and topbar (user, avatarInitial, nav, currentPath,
+      csrfToken, brand)
+-%>
+<%- include('../partials/head') %>
+  <div class="flex min-h-screen">
+    <%- include('../partials/sidebar') %>
+    <div class="flex min-w-0 flex-1 flex-col">
+      <%- include('../partials/topbar') %>
+      <main class="flex-1 p-4 sm:p-6 lg:p-8">
+<% if (locals.hero) { %>
+<%- include('../partials/page-hero', { title, hero }) %>
+<% } else { %>
+        <div data-page-head class="mb-4 flex flex-wrap items-end justify-between gap-4">
+          <h1 class="text-xl font-semibold tracking-tight text-slate-900"><%= title %></h1>
+<%- page.actions %>
+        </div>
+<% } %>
+<%- page.body %>
+      </main>
+    </div>
+  </div>
+<%- include('../partials/page-scripts', { scripts }) %>
+<%- include('../partials/foot') %>

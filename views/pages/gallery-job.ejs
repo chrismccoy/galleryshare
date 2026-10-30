@@ -1,0 +1,42 @@
+<%#
+  Progress of one ingest job (images being added to a gallery), signed-in shell. A finished job redirects to
+  the gallery instead, so this page shows a waiting or a failed job.
+  Rendered by GET /dashboard/galleries/jobs/:id (routes/pages/ingest-jobs.js); refreshes itself while waiting.
+  Locals:
+    title (chrome local); refreshSeconds sets the meta refresh in partials/head.ejs
+    job: { id, gallery_id, status, total, processed, skipped: [{ name, reason, more? }], error }; a closing skipped
+      item with `more` stands for that many further files and shows only its reason
+    waiting: true while the job is pending or running
+    skippedTotal: how many files job.skipped stands for
+    addedSome: true when the job added at least one image
+    galleryOpen: true when the gallery still exists (not in Trash), so it can be linked
+    pathTo: app.locals (config/urls.js PATH_TO), for the gallery link
+-%>
+<div class="card max-w-xl">
+  <div class="card-head">
+    <%- include('../partials/icon', { name: 'fa-solid fa-images', iconExtra: 'text-slate-400' }) %> <h2>Processed <%= job.processed %> of <%= job.total %></h2>
+  </div>
+  <div class="card-body">
+    <% if (waiting) { %>
+      <div class="notice notice-info" role="status">
+        <%- include('../partials/icon', { name: 'fa-solid fa-hourglass-half' }) %>
+        <span><%= job.status === 'running' ? 'Adding images…' : 'Waiting to start…' %> This page refreshes every <%= plural(refreshSeconds, 'second') %>.</span>
+      </div>
+      <p class="help">You can leave this page; the images keep being added. The gallery opens here when they are ready.</p>
+    <% } else { %>
+      <%- include('../partials/notices', { notices: { error: job.error } }) %>
+      <% if (addedSome) { %>
+        <p class="text-sm text-slate-600">The images added before this stopped are kept.</p>
+      <% } %>
+    <% } %>
+    <% if (job.skipped.length) { %>
+      <div class="mt-3" data-skipped>
+        <p class="text-sm font-medium text-slate-700">Not added (<%= plural(skippedTotal, 'file') %>):</p>
+        <%- include('../partials/skipped-files', { skippedList: { items: job.skipped, listClass: 'text-sm text-slate-600' } }) %>
+      </div>
+    <% } %>
+    <% if (!waiting && galleryOpen) { %>
+      <a href="<%= pathTo.gallery(job.gallery_id) %>" class="btn btn-quiet btn-sm mt-3">Open the gallery</a>
+    <% } %>
+  </div>
+</div>

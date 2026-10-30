@@ -1,0 +1,30 @@
+<%#
+  Sticky top bar of the public layout (login, invite, reset, error, not found and share pages) and the opening
+  <main>. Shows the signed-in name and a Dashboard link when a user exists.
+  Included by layouts/public.ejs after partials/head.ejs; layouts/public.ejs closes the <main>. The header and
+  <main> carry data-public-header and data-public-main so tests can find the public chrome without its classes.
+  Locals:
+    user: signed-in user or undefined
+    brand: { name, icon }
+    paths: app.locals (config/urls.js PATHS), for the links
+-%>
+<header class="pub-header-sticky" data-public-header>
+  <div class="mx-auto flex h-14 max-w-public items-center gap-3 px-5">
+    <a href="<%= paths.front %>" class="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight text-slate-900">
+      <span class="brand-mark brand-mark-sm">
+        <%- include('../icon', { name: brand.icon }) %>
+      </span>
+      <%= brand.name %>
+    </a>
+    <span class="flex-1"></span>
+    <% if (locals.user) { %>
+      <span class="owner-only">
+        <%- include('../icon', { name: 'fa-solid fa-user' }) %> Signed in as <%= user.display_name %>
+      </span>
+      <a href="<%= paths.dashboard %>" class="btn btn-quiet btn-sm">
+        <%- include('../icon', { name: 'fa-solid fa-gauge-high' }) %> Dashboard
+      </a>
+    <% } %>
+  </div>
+</header>
+<main class="pub-main" data-public-main>

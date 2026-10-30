@@ -1,0 +1,7 @@
+node_modules/
+data/
+.env
+public/css/app.css
+test-results/
+playwright-report/
+package-lock.json

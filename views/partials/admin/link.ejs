@@ -1,0 +1,14 @@
+<%#
+  Notice that shows a one-time link (invite or reset link) once, with a read-only field to copy it.
+  Included by pages/admin/invites.ejs and pages/admin/user.ejs, which pass `link` explicitly.
+  Locals: link: { kind, url, expires }, or null (nothing renders).
+-%>
+<% if (link) { %>
+  <div class="notice notice-warn mb-4" role="status" data-one-time-link>
+    <%- include('../icon', { name: 'fa-solid fa-link' }) %>
+    <div class="min-w-0 flex-1">
+      <p class="font-medium">Copy this <%= link.kind %> link now. It is shown only once and expires <%= link.expires %>.</p>
+      <input type="text" readonly value="<%= link.url %>" aria-label="One-time link" class="field-input mt-2 font-mono text-xs" />
+    </div>
+  </div>
+<% } %>

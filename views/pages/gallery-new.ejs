@@ -1,0 +1,13 @@
+<%#
+  Add gallery: upload images and ZIP files, mixed in one upload (signed-in shell).
+  Rendered by GET /dashboard/galleries/new and, with an error, by a refused POST …/new/upload
+  (routes/pages/gallery-upload.js). The route passes scripts: ['gallery-upload-rules', 'gallery-upload'].
+  Locals:
+    title, csrfToken (chrome locals)
+    uploadAction, upload: for partials/gallery-upload-forms.ejs
+    error: why the last upload was refused (names the limit), or null
+-%>
+<div class="max-w-4xl">
+  <%- include('../partials/notices', { notices: pageNotices }) %>
+  <%- include('../partials/gallery-upload-forms', { uploadAction, upload }) %>
+</div>

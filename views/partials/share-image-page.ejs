@@ -1,0 +1,20 @@
+<%#
+  The body of an image's own page: Back to gallery with Previous and Next, then the image (a click opens the large
+  copy in a new tab) with its title, caption, Save and Copy image link. Rendered by pages/share-image.ejs into a string
+  that the share theme partial wraps.
+  Locals (one object, so nothing is inherited from the including page):
+    imagePage: { image: { title, caption, webUrl, download }, nav: { prevUrl, nextUrl, galleryUrl }, counter }
+      counter: where the image is, e.g. 'Photo 3 of 24'
+      nav.prevUrl, nav.nextUrl: the neighbours' pages, or null at the first or last image (partials/share-image-step.ejs shows a disabled button)
+-%>
+<nav class="mb-4 flex flex-wrap items-center justify-between gap-2" aria-label="Images" data-image-nav>
+  <a href="<%= imagePage.nav.galleryUrl %>" class="btn btn-quiet btn-sm" data-image-gallery>
+    <%- include('icon', { name: 'fa-solid fa-table-cells' }) %> Back to gallery
+  </a>
+  <span class="share-count mt-0" data-image-counter aria-live="polite"><%= imagePage.counter %></span>
+  <div class="flex gap-2">
+    <%- include('share-image-step', { step: { dir: 'prev', url: imagePage.nav.prevUrl } }) %>
+    <%- include('share-image-step', { step: { dir: 'next', url: imagePage.nav.nextUrl } }) %>
+  </div>
+</nav>
+<%- include('share-figure', { figure: { image: imagePage.image, save: true, imagePage: true } }) %>

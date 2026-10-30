@@ -1,0 +1,11 @@
+<%#
+  Role select, one option per role in domain/roles.js ROLES. Included by pages/admin/invites.ejs and
+  partials/admin/user-profile.ejs.
+  Locals (one object, so nothing is inherited from the including page): roleSelect: { selected } with selected 'user'
+    or 'admin'; roles, roleLabels (app locals). The select's id is "role", for the page's label.
+-%>
+<select id="role" name="role" class="field-input">
+<% roles.forEach(function (role) { -%>
+  <option value="<%= role %>"<%= roleSelect.selected === role ? ' selected' : '' %>><%= roleLabels[role] %></option>
+<% }); -%>
+</select>

@@ -1,0 +1,7 @@
+<%#
+  The close button of a notice. Hidden until public/js/dismiss.js (a shell script) shows it, so a page without that
+  script never shows a button that does nothing; clicking it removes the notice it sits in.
+  Included by partials/notices.ejs and partials/gallery-skipped.ejs, as the last child of the [data-notice] element.
+  Locals: none.
+-%>
+<button type="button" class="notice-dismiss" aria-label="Dismiss" data-dismiss hidden><%- include('icon', { name: 'fa-solid fa-xmark' }) %></button>

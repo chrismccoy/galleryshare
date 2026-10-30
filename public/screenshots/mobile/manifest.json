@@ -1,0 +1,258 @@
+{
+  "project": "mobile",
+  "capturedAt": "2026-11-03T13:21:49.501Z",
+  "shots": [
+    {
+      "file": "01-login.jpg",
+      "section": "public",
+      "title": "Sign in",
+      "text": "Email and password. There is no public sign-up: accounts come from invite links."
+    },
+    {
+      "file": "02-admin-invite-created.jpg",
+      "section": "admin",
+      "title": "Invite created",
+      "text": "The one-time invite link, to copy and send by hand. With SETTINGS_ENC_KEY set it can be copied again later."
+    },
+    {
+      "file": "03-admin-reset-link-created.jpg",
+      "section": "admin",
+      "title": "Reset link created",
+      "text": "A one-time password reset link for a user, valid for 24 hours."
+    },
+    {
+      "file": "04-invite-register.jpg",
+      "section": "public",
+      "title": "Invite link",
+      "text": "A one-time invite opens this form: name, email and password, then the new user is signed in."
+    },
+    {
+      "file": "05-reset-password.jpg",
+      "section": "public",
+      "title": "Reset link",
+      "text": "An admin-issued one-time link that sets a new password and signs the user out everywhere."
+    },
+    {
+      "file": "06-not-found.jpg",
+      "section": "user",
+      "title": "Not found",
+      "text": "Unknown pages, and admin pages for anyone who is not an admin."
+    },
+    {
+      "file": "07-new-gallery.jpg",
+      "section": "user",
+      "title": "Add gallery",
+      "text": "Drop or choose JPEG, PNG or WebP images and ZIP files, mixed in one upload. The limits in effect are shown in the drop zone."
+    },
+    {
+      "file": "08-new-gallery-chosen.jpg",
+      "section": "user",
+      "title": "Files chosen",
+      "text": "The list shows every chosen image and ZIP file, with a summary of the count and size, before the upload starts."
+    },
+    {
+      "file": "09-job-page.jpg",
+      "section": "user",
+      "title": "Adding images",
+      "text": "The upload is processed in the background. This page refreshes itself and opens the gallery when it is ready."
+    },
+    {
+      "file": "10-gallery-edit.jpg",
+      "section": "user",
+      "title": "Edit a gallery",
+      "text": "Title, description, the ZIP switch, grid text, share theme and image view; each image with its title and caption, drag to reorder or Up and Down, Delete; the share link with Copy and Revoke; add more images; Move to Trash."
+    },
+    {
+      "file": "11-share-multi.jpg",
+      "section": "public",
+      "title": "Shared gallery",
+      "text": "What anyone with the link sees: the title, description, a card grid with titles and captions, and Download ZIP when it is allowed. Nothing about the owner."
+    },
+    {
+      "file": "12-share-lightbox.jpg",
+      "section": "public",
+      "title": "Lightbox",
+      "text": "A click opens the image large, with previous and next, arrow keys, Esc, a thumbnail strip, Save and Copy image link."
+    },
+    {
+      "file": "13-share-theme-frame.jpg",
+      "section": "public",
+      "title": "Theme: Frame",
+      "text": "A white card with a soft shadow on a faint purple-grey page, and the photo count under the title."
+    },
+    {
+      "file": "14-share-theme-dark-wall.jpg",
+      "section": "public",
+      "title": "Theme: Dark wall",
+      "text": "A deep navy panel with a purple glow, a white title and thumbnails with a fine light edge."
+    },
+    {
+      "file": "15-share-theme-app-window.jpg",
+      "section": "public",
+      "title": "Theme: App window",
+      "text": "A window with the gallery title in its title bar; the description, photo count and ZIP button sit inside."
+    },
+    {
+      "file": "16-share-theme-polaroid.jpg",
+      "section": "public",
+      "title": "Theme: Polaroid",
+      "text": "A warm dotted board with every image in a white instant-photo frame, tilted a little left or right."
+    },
+    {
+      "file": "17-share-theme-glass.jpg",
+      "section": "public",
+      "title": "Theme: Glass",
+      "text": "A frosted-glass panel on a dark page with purple, cyan and pink glows."
+    },
+    {
+      "file": "18-share-theme-paper-stack.jpg",
+      "section": "public",
+      "title": "Theme: Paper stack",
+      "text": "A white card with two purple-tinted sheets stacked behind it and a dashed line under the title."
+    },
+    {
+      "file": "19-share-image-page.jpg",
+      "section": "public",
+      "title": "Image page",
+      "text": "With the Image page view each image has a page of its own in the gallery’s theme: Back to gallery, “Photo 2 of 24”, Previous and Next (disabled at the ends, arrow keys too), Save and Copy image link."
+    },
+    {
+      "file": "20-gallery-edit-unsaved.jpg",
+      "section": "user",
+      "title": "Unsaved changes",
+      "text": "Changes wait for Save gallery: the bar at the bottom counts them, and an image marked with Delete fades with “Deleted when you save” until it is saved, undone or discarded."
+    },
+    {
+      "file": "21-gallery-leave-dialog.jpg",
+      "section": "user",
+      "title": "Leave without saving?",
+      "text": "With unsaved changes, a link or another button that would leave the page asks first: Stay on this page, or Leave without saving."
+    },
+    {
+      "file": "22-share-single.jpg",
+      "section": "public",
+      "title": "Shared single image",
+      "text": "A gallery with one image shows it embedded with its title, caption and Copy image link; a click opens it in a new tab."
+    },
+    {
+      "file": "23-share-unavailable.jpg",
+      "section": "public",
+      "title": "Link not available",
+      "text": "The same page for a revoked link, a gallery in Trash, a disabled owner, sharing turned off or a made-up address."
+    },
+    {
+      "file": "24-gallery-edit-skipped.jpg",
+      "section": "user",
+      "title": "Files not added",
+      "text": "Files that are not JPEG, PNG or WebP images are listed once by name; the good images are kept."
+    },
+    {
+      "file": "25-dashboard.jpg",
+      "section": "user",
+      "title": "Dashboard",
+      "text": "Galleries, images, storage used and live share links, the most recent galleries and the latest activity."
+    },
+    {
+      "file": "26-my-activity.jpg",
+      "section": "user",
+      "title": "My activity",
+      "text": "Your own actions and what happened to your galleries and account: visits, ZIP downloads and an admin’s changes, coloured by what happened."
+    },
+    {
+      "file": "27-my-galleries.jpg",
+      "section": "user",
+      "title": "My galleries",
+      "text": "Every gallery of this user with its cover, image count and size; shared ones carry a pill."
+    },
+    {
+      "file": "28-trash.jpg",
+      "section": "user",
+      "title": "Trash",
+      "text": "Deleted galleries wait here for 30 days: restore one, delete it forever, or empty the whole Trash. Their links stop working meanwhile."
+    },
+    {
+      "file": "29-account.jpg",
+      "section": "user",
+      "title": "Account",
+      "text": "Change your own password."
+    },
+    {
+      "file": "30-admin-overview.jpg",
+      "section": "admin",
+      "title": "Overview",
+      "text": "Users, galleries, images, storage on disk, live share links, the largest galleries and the newest activity."
+    },
+    {
+      "file": "31-admin-activity.jpg",
+      "section": "admin",
+      "title": "Activity",
+      "text": "Everything that happened across the app, newest first, with who, what, details and the IP address and browser; filter by person, area or gallery."
+    },
+    {
+      "file": "32-admin-users.jpg",
+      "section": "admin",
+      "title": "Users",
+      "text": "Everyone with an account, their role and status."
+    },
+    {
+      "file": "33-admin-user-detail.jpg",
+      "section": "admin",
+      "title": "User detail",
+      "text": "Issue a reset link, disable or enable the account, change the role, or delete the user."
+    },
+    {
+      "file": "34-admin-user-delete-confirm.jpg",
+      "section": "admin",
+      "title": "Delete a user",
+      "text": "Deleting asks for confirmation first and removes the user’s galleries and images."
+    },
+    {
+      "file": "35-admin-user-env-admin.jpg",
+      "section": "admin",
+      "title": "The .env admin",
+      "text": "The owner account is managed in .env, so it cannot be disabled, demoted or deleted here."
+    },
+    {
+      "file": "36-admin-invites.jpg",
+      "section": "admin",
+      "title": "Invites",
+      "text": "Create invites for users or admins; list them as pending, used, expired or revoked."
+    },
+    {
+      "file": "37-admin-galleries.jpg",
+      "section": "admin",
+      "title": "Galleries",
+      "text": "Every user’s galleries with owner, size and share state; Edit opens the same edit view the owner has."
+    },
+    {
+      "file": "38-admin-gallery-edit.jpg",
+      "section": "admin",
+      "title": "Edited by an admin",
+      "text": "An admin can remove a single image or fix a title; the owner then sees an “Edited by an admin” pill."
+    },
+    {
+      "file": "39-admin-shares.jpg",
+      "section": "admin",
+      "title": "Shared links",
+      "text": "Every live link with its owner, gallery, views, last opened and status, plus View, Details and Revoke."
+    },
+    {
+      "file": "40-admin-share-detail.jpg",
+      "section": "admin",
+      "title": "Share link details",
+      "text": "One link with its latest page views and ZIP downloads: time, IP address and a shortened user-agent."
+    },
+    {
+      "file": "41-admin-settings.jpg",
+      "section": "admin",
+      "title": "Settings",
+      "text": "Override switches for items per page, every upload limit, grid text, the share theme and the image view; the public sharing switch; and what is in effect now."
+    },
+    {
+      "file": "42-admin-account.jpg",
+      "section": "admin",
+      "title": "Admin account",
+      "text": "The .env admin’s password is managed in .env, so the form is replaced by a note."
+    }
+  ]
+}

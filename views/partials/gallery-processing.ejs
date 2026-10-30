@@ -1,0 +1,11 @@
+<%#
+  "Still processing" banner of the gallery edit view, while an ingest job for the gallery is pending or running.
+  Included by pages/gallery-edit.ejs.
+  Locals:
+    job: the pending or running ingest job ({ id, processed, total })
+    pathTo: app.locals (config/urls.js PATH_TO), for the progress link
+-%>
+<div class="notice notice-info" role="status" data-processing>
+  <%- include('icon', { name: 'fa-solid fa-hourglass-half' }) %>
+  <span>Still processing <%= job.processed %> of <%= job.total %>. <a href="<%= pathTo.ingestJob(job.id) %>" class="font-medium underline">View progress</a></span>
+</div>

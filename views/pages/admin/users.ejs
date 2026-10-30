@@ -1,0 +1,19 @@
+<%#
+  List of all users with a Manage button (signed-in shell).
+  Rendered by GET /admin/users (routes/pages/admin/users.js).
+  Locals:
+    title, notice (see partials/notices.ejs)
+    rows: [{ id, name, email, role, status, joined }] (status: the Active/Disabled pill { text, tone },
+      accountStatus in routes/pages/admin/users.js)
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<div class="card">
+  <%- include('../../partials/data-table', {
+        table: {
+          columns: [{ label: 'Name' }, { label: 'Email' }, { label: 'Role' }, { label: 'Status' }, { label: 'Joined' }, { label: '' }],
+          rows,
+          row: 'rows/user',
+        },
+      }) %>
+</div>

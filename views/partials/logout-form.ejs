@@ -1,0 +1,17 @@
+<%#
+  Log-out button (POST /logout with CSRF), in the look of the place it sits.
+  Included by partials/sidebar.ejs and partials/topbar.ejs.
+  Locals: variant: 'sidebar' | 'topbar'; csrfToken (chrome local)
+  paths (app locals, config/urls.js): page paths for links and form actions
+-%>
+<form action="<%= paths.logout %>" method="post"<% if (variant === 'topbar') { %> class="inline"<% } %>>
+  <%- include('csrf-field') %>
+  <% if (variant === 'sidebar') { %>
+    <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white">
+      <span class="w-4 text-center text-ui text-slate-400"><%- include('icon', { name: 'fa-solid fa-right-from-bracket' }) %></span>
+      <span>Log out</span>
+    </button>
+  <% } else { %>
+    <button type="submit" class="rounded px-2 py-1 text-slate-500">Log out</button>
+  <% } %>
+</form>

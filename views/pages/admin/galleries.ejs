@@ -1,0 +1,34 @@
+<%#
+  All users' galleries, newest first, with a user filter and "Older galleries" paging (signed-in shell).
+  Rendered by GET /admin/galleries (routes/pages/admin/galleries.js).
+  Locals:
+    title (chrome local)
+    rows: [{ id, title, owner, imageCount, size, created, shared }] (routes/view/gallery-rows.js plus owner)
+    userId: active user id filter, or null
+    olderUrl: URL of the next older page, or null
+    notice: message such as "Moved to Trash.", or null
+    csrfToken (chrome local)
+    paths, pathTo: app.locals (config/urls.js), for links and form actions
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<form method="get" action="<%= paths.admin.galleries %>" class="filter-bar">
+  <label for="user" class="field-label">User ID</label>
+  <input id="user" name="user" type="number" min="1" inputmode="numeric" value="<%= userId || '' %>" class="field-input w-28" />
+  <button type="submit" class="btn btn-quiet btn-sm">Filter</button>
+</form>
+<div class="card">
+  <%- include('../../partials/data-table', {
+        table: {
+          columns: [
+            { label: 'Owner' }, { label: 'Gallery' }, { label: 'Images', class: 'hidden sm:table-cell' },
+            { label: 'Size', class: 'hidden sm:table-cell' }, { label: 'Created', class: 'hidden md:table-cell' },
+            { label: 'Actions', srOnly: true, class: 'text-right' },
+          ],
+          rows,
+          row: 'rows/gallery',
+          rowLocals: { admin: true },
+          empty: { icon: 'fa-solid fa-images', text: 'No galleries match.' },
+        },
+      }) %>
+</div>
+<%- include('../../partials/pager', { pager: { olderUrl: locals.olderUrl, label: 'Older galleries' } }) %>

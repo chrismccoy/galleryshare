@@ -1,0 +1,12 @@
+<%#
+  Heading action of pages/trash.ejs: Empty trash behind the inline Yes/No confirm, while Trash has rows.
+  Rendered by renderInShell (routes/pages/trash.js) into the shell's heading row.
+  Locals: as pages/trash.ejs (rows; paths from app.locals).
+-%>
+<% if (rows.length) { %>
+  <div class="flex flex-wrap items-center gap-2" data-confirm>
+    <%- include('../danger-confirm', { confirm: {
+          icon: 'fa-solid fa-fire', label: 'Empty trash', action: paths.trashEmpty, prompt: "Empty trash? This can't be undone.",
+        } }) %>
+  </div>
+<% } %>

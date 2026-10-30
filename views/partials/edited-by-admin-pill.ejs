@@ -1,0 +1,7 @@
+<%#
+  The amber "Edited by an admin" pill, shown when someone other than the owner made the last change to a gallery.
+  Included by partials/rows/gallery.ejs (My galleries) and pages/gallery-edit.ejs.
+  Locals (one object, so nothing is inherited from the including page): pill: { extra? } extra: optional extra CSS
+  classes.
+-%>
+<span class="pill pill-amber<%= pill.extra ? ' ' + pill.extra : '' %>" data-edited-by-admin><%- include('icon', { name: 'fa-solid fa-user-shield' }) %> Edited by an admin</span>

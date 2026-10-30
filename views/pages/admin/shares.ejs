@@ -1,0 +1,31 @@
+<%#
+  Live public share links of every user, with "Older links" paging (signed-in shell).
+  Rendered by GET /admin/shares (routes/pages/admin/shares.js).
+  Locals:
+    title (chrome local)
+    rows: [{ id, owner, gallery, shared, clicks, lastOpened, status: { text, tone }, url }] (status: the pill)
+      (url: absolute public link, or null when it can no longer be derived)
+    sharingOn: false shows the "turned off" banner
+    clicksNote: the approximate-clicks note (routes/pages/admin/shares.js)
+    olderUrl: URL of the next older page, or null
+    notice: message such as "Share link revoked.", or null
+    csrfToken (chrome local)
+    pathTo: app.locals (config/urls.js PATH_TO), for links and form actions
+-%>
+<%- include('../../partials/notices', { notices: pageNotices }) %>
+<%- include('../../partials/sharing-off', { sharingOn }) %>
+<p class="help mb-3"><%= clicksNote %></p>
+<div class="card">
+  <%- include('../../partials/data-table', {
+        table: {
+          columns: [
+            { label: 'Owner' }, { label: 'Gallery' }, { label: 'Shared' }, { label: 'Clicks' }, { label: 'Last opened' },
+            { label: 'Status' }, { label: 'Actions', srOnly: true, class: 'text-right' },
+          ],
+          rows,
+          row: 'rows/admin-share',
+          empty: { icon: 'fa-solid fa-link', text: 'No shared links.' },
+        },
+      }) %>
+</div>
+<%- include('../../partials/pager', { pager: { olderUrl: locals.olderUrl, label: 'Older links' } }) %>

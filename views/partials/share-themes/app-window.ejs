@@ -1,0 +1,20 @@
+<%#
+  Share theme "App window": a window with red, yellow and green dots and the gallery title in its title bar;
+  the description, photo count and ZIP button sit inside, above the grid on a light inner panel.
+  Included by pages/share.ejs, pages/share-single.ejs and pages/share-image.ejs through the theme key (domain/share-themes.js); styles under
+  .share-theme-app-window in src/share-themes.css.
+  Locals (one object, so nothing is inherited from the including page):
+    shell: { gallery, zipUrl, count, body }: the page heading values, the photo count text and the rendered page body
+-%>
+<section class="share-shell share-theme-app-window" data-share-theme="app-window">
+  <div class="share-window-bar">
+    <span class="share-window-dot share-window-dot-red" aria-hidden="true"></span>
+    <span class="share-window-dot share-window-dot-amber" aria-hidden="true"></span>
+    <span class="share-window-dot share-window-dot-green" aria-hidden="true"></span>
+    <h1 class="share-window-title"><%= shell.gallery.title %></h1>
+  </div>
+  <div class="share-window-body">
+    <%- include('../share-header', { header: { gallery: shell.gallery, zipUrl: shell.zipUrl, count: shell.count, titleShown: false } }) %>
+    <%- shell.body %>
+  </div>
+</section>

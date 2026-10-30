@@ -1,0 +1,10 @@
+<%#
+  "View" button that opens a public share link in a new tab; hidden while an inline confirm is open.
+  Included by partials/rows/admin-share.ejs and pages/admin/share.ejs.
+  Locals: url: absolute public link, or null when it can no longer be derived (nothing renders).
+-%>
+<% if (url) { %>
+  <a href="<%= url %>" target="_blank" rel="noopener noreferrer" data-confirm-hide class="btn btn-primary btn-sm">
+    <%- include('../icon', { name: 'fa-regular fa-eye' }) %> View
+  </a>
+<% } %>

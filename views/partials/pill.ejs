@@ -1,0 +1,12 @@
+<%#
+  A small status pill: the plain grey .pill, or tinted by `tone`. The routes pick the tone for a status
+  (invites, share links, user accounts), so the tone-to-class map lives here once and Tailwind's view scan still
+  sees the class names.
+  Included by partials/rows/invite.ejs, partials/rows/user.ejs, partials/rows/admin-share.ejs, pages/admin/share.ejs,
+  partials/admin/user-profile.ejs and partials/rows/activity.ejs (tone by event kind, routes/view/activity-page.js).
+  Locals: pill, one object so nothing is inherited from the page:
+    text: pill text
+    tone: 'green' | 'amber' | 'red' | 'sky', or 'neutral' for the plain grey pill
+-%>
+<% const PILL_TONES = { green: 'pill-green', amber: 'pill-amber', red: 'pill-red', sky: 'pill-sky', neutral: '' }; -%>
+<span class="pill<%= PILL_TONES[pill.tone] ? ' ' + PILL_TONES[pill.tone] : '' %>"><%= pill.text %></span>

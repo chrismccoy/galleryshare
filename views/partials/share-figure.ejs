@@ -1,0 +1,32 @@
+<%#
+  One shared image shown large: its web copy (a click opens it alone in a new tab), its title and caption, and its
+  buttons: Save (when asked) and Copy image link (the full address of the web copy, for public/js/copy-link.js).
+  Included by partials/share-single-image.ejs (a single-image gallery) and partials/share-image-page.ejs (an image's
+  own page).
+  Locals (one object, so nothing is inherited from the including page):
+    figure: { image, save, imagePage }
+      image: { title, caption, webUrl, download? } (routes/view/share-view.js toShareImage)
+      save: true to show Save (downloads the web copy as image.download)
+      imagePage: true on an image's own page (adds the data-image-page hook)
+-%>
+<figure class="share-figure" data-share-single<% if (figure.imagePage) { %> data-image-page<% } %>>
+  <a href="<%= figure.image.webUrl %>" target="_blank" rel="noopener" class="block bg-black/[0.06]">
+    <img src="<%= figure.image.webUrl %>" alt="<%= figure.image.title || figure.image.caption %>" class="mx-auto block max-h-[75vh] w-auto max-w-full object-contain" />
+  </a>
+  <figcaption class="flex flex-wrap items-start justify-between gap-3 px-4 py-3">
+    <div class="min-w-0">
+      <% if (figure.image.title) { %><p class="text-sm font-medium text-slate-900"><%= figure.image.title %></p><% } %>
+      <p class="mt-0.5 text-xs text-muted"><%= figure.image.caption %></p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <% if (figure.save) { %>
+        <a href="<%= figure.image.webUrl %>" download="<%= figure.image.download %>" class="btn btn-primary btn-sm" data-image-save>
+          <%- include('icon', { name: 'fa-solid fa-download' }) %> Save
+        </a>
+      <% } %>
+      <button type="button" class="btn btn-primary btn-sm" data-copy-link="<%= figure.image.webUrl %>" data-share-copy-image title="Copy the image's address, to embed it on a forum or elsewhere">
+        <%- include('icon', { name: 'fa-solid fa-link' }) %> <span data-copy-label>Copy image link</span>
+      </button>
+    </div>
+  </figcaption>
+</figure>

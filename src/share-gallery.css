@@ -1,0 +1,17 @@
+@layer base {
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  .share-figure {
+    @apply overflow-hidden rounded-[14px] border border-black/[0.07] bg-white shadow-bento-sm;
+  }
+  .lb-btn {
+    @apply flex items-center gap-[5px] rounded-[10px] border border-white/[0.12] bg-white/[0.08] px-3 py-[6px] text-xs text-white/60 transition-colors hover:bg-white/[0.15] hover:text-white;
+  }
+  .lb-nav {
+    @apply flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-white/[0.12] bg-white/10 text-[18px] text-white backdrop-blur transition-all hover:border-white/30 hover:bg-white/20 max-[600px]:h-9 max-[600px]:w-9 max-[600px]:text-sm;
+  }
+}

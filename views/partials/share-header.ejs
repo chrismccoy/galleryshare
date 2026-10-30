@@ -1,0 +1,24 @@
+<%#
+  Heading of a shared gallery page: the gallery title (or its default), the optional description and the
+  Download ZIP button when the gallery allows it.
+  Included by the share theme partials (partials/share-themes/*.ejs) on pages/share.ejs, pages/share-single.ejs and pages/share-image.ejs.
+  Locals: header, one object so nothing is inherited from the page:
+    gallery: { title, description } (title already defaulted; description may be null)
+    zipUrl: the ZIP download URL, or null to hide the button
+    count: optional photo count text, e.g. '2 photos', shown as a small pill under the title (the themes pass it)
+    titleShown: false leaves out the <h1> (the App window theme puts it in its title bar); shown when omitted
+-%>
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4" data-share-header>
+  <div class="min-w-0">
+    <% if (header.titleShown !== false) { %><h1 class="text-2xl font-semibold tracking-tight text-slate-900"><%= header.gallery.title %></h1><% } %>
+    <% if (header.gallery.description) { %>
+      <p class="<%= header.titleShown !== false ? 'mt-1 ' : '' %>max-w-[70ch] whitespace-pre-line text-sm text-muted" data-share-description><%= header.gallery.description %></p>
+    <% } %>
+    <% if (header.count) { %><span class="share-count" data-share-count><%= header.count %></span><% } %>
+  </div>
+  <% if (header.zipUrl) { %>
+    <a href="<%= header.zipUrl %>" class="btn btn-primary btn-sm" data-share-zip>
+      <%- include('icon', { name: 'fa-solid fa-file-zipper' }) %> Download ZIP
+    </a>
+  <% } %>
+</header>

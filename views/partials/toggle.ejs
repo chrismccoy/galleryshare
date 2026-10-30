@@ -1,0 +1,29 @@
+<%#
+  Labelled on/off switch row (a screen-reader-only checkbox styled as a switch).
+  Included by pages/admin/settings.ejs (each override switch and the two Sharing switches) and pages/gallery-edit.ejs
+  (Allow ZIP download).
+  Locals (one object, so nothing is inherited from the including page, such as its `title`):
+    toggle: { name, title, checked, help? }
+      name: form field name (posted as "on" when checked)
+      title: label shown beside the switch and used as its accessible name
+      checked: boolean initial state
+      help: optional help text under the title
+-%>
+<div class="toggle-row">
+  <label class="relative mt-0.5 inline-flex h-5 w-9 flex-shrink-0 cursor-pointer items-center">
+    <input type="checkbox" name="<%= toggle.name %>" value="on" class="peer sr-only" aria-label="<%= toggle.title %>"
+      <%= toggle.checked ? 'checked' : '' %> />
+    <span
+      class="absolute inset-0 rounded-full bg-slate-300 transition-colors peer-checked:bg-brand-600 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500 peer-focus-visible:ring-offset-2"
+    ></span>
+    <span
+      class="relative h-4 w-4 translate-x-0.5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-4"
+    ></span>
+  </label>
+  <div>
+    <div class="text-sm font-medium text-slate-900"><%= toggle.title %></div>
+    <% if (toggle.help) { %>
+      <p class="mt-0.5 text-xs text-slate-500"><%= toggle.help %></p>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<%#
+  The Previous or Next button of an image's own page: a link to the neighbour's page, or a disabled button at the first
+  or last image. The arrow sits on the outer side (left of Previous, right of Next).
+  Included twice by partials/share-image-page.ejs.
+  Locals (one object, so nothing is inherited from the including page):
+    step: { dir, url }
+      dir: 'prev' or 'next' (also the link's rel and the data-image-prev / data-image-next hook)
+      url: the neighbour's page, or null at the end
+-%>
+<% const prev = step.dir === 'prev';
+   const label = prev ? 'Previous' : 'Next';
+   const icon = prev ? 'fa-solid fa-chevron-left' : 'fa-solid fa-chevron-right'; -%>
+<% if (step.url) { %>
+  <a href="<%= step.url %>" rel="<%= step.dir %>" class="btn btn-primary btn-sm" data-image-<%= step.dir %>>
+<% } else { %>
+  <button type="button" class="btn btn-quiet btn-sm" disabled data-image-<%= step.dir %>>
+<% } %>
+    <% if (prev) { %><%- include('icon', { name: icon }) %> <% } %><%= label %><% if (!prev) { %> <%- include('icon', { name: icon }) %><% } %>
+<% if (step.url) { %></a><% } else { %></button><% } %>

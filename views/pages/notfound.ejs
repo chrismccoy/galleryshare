@@ -1,0 +1,23 @@
+<%#
+  404 page body. Signed-in users get it inside the dashboard shell; others get the public layout with a
+  link to sign in (notFound in routes/view/respond.js picks the layout). Rendered for unknown paths and for admin
+  pages shown to non-admins (routes/middleware/guards.js, and the catch-all 404 handler).
+  Locals:
+    title: page title
+    user: signed-in user or undefined (chooses the layout)
+    backLink: app.locals (routes/view/app-locals.js), the back link for `user`
+-%>
+<% if (locals.user) { %>
+<%- include('../partials/empty-state', { empty: {
+      icon: 'fa-solid fa-magnifying-glass',
+      text: 'Page not found.',
+      link: backLink(locals.user),
+    } }) %>
+<% } else { %>
+<%- include('../partials/state-panel', { state: {
+      tone: 'slate',
+      icon: 'fa-solid fa-magnifying-glass',
+      heading: 'Page not found.',
+      link: backLink(locals.user),
+    } }) %>
+<% } %>

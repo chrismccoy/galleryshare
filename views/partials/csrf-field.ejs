@@ -1,0 +1,5 @@
+<%#
+  Hidden CSRF field for a POST form (routes/middleware/csrf.js checks it). Included inside every form that posts.
+  Locals: csrfToken (chrome local: the session's token, or the signed anonymous token when signed out).
+-%>
+<input type="hidden" name="_csrf" value="<%= csrfToken %>" />

@@ -1,0 +1,15 @@
+<%#
+  The not-available page for /s/:token, used for every reason a link cannot be opened (unknown, malformed or
+  revoked token, gallery in Trash, owner disabled, public sharing off).
+  Rendered by every share route (routes/view/share-responses.js unavailable) with status 404. Gives no hint why.
+  Locals:
+    title: the unavailable message, shown as the heading
+    meta: generic page meta (see partials/head.ejs)
+    homeLink (app locals, routes/view/app-locals.js HOME_LINK): the link to the front page
+-%>
+    <%- include('../partials/state-panel', { state: {
+          tone: 'slate',
+          icon: 'fa-solid fa-link-slash',
+          heading: title,
+          link: homeLink,
+        } }) %>

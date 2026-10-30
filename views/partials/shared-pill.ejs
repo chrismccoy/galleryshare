@@ -1,0 +1,8 @@
+<%#
+  Green "Shared" pill for a gallery with a live public share link; `data-shared-pill` is its test hook.
+  Included by partials/rows/gallery.ejs (My galleries and the admin list), pages/dashboard.ejs (recent cards) and
+  partials/gallery-share-panel.ejs (edit view).
+  Locals (one object, so nothing is inherited from the including page): pill: { extra? } extra: optional extra CSS
+  classes (e.g. spacing).
+-%>
+<span class="pill pill-green<%= pill.extra ? ' ' + pill.extra : '' %>" data-shared-pill>Shared</span>

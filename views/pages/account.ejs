@@ -1,0 +1,39 @@
+<%#
+  Account page with the change-password form (signed-in shell).
+  Rendered by GET /account and POST /account/password (routes/pages/account.js).
+  Locals:
+    title, user, csrfToken (chrome locals)
+    minPassword: minimum password length (app.locals)
+    managedByEnv: true for the .env admin: no password form (its password comes from ADMIN_PASSWORD)
+    notice: success message or null
+    error: error message or null
+    paths: app.locals (config/urls.js PATHS), for links and form actions
+-%>
+<div class="card max-w-lg">
+  <div class="card-head">
+    <% if (managedByEnv) { %>
+      <%- include('../partials/icon', { name: 'fa-solid fa-user', iconExtra: 'text-slate-400' }) %> <h2>Account</h2>
+    <% } else { %>
+      <%- include('../partials/icon', { name: 'fa-solid fa-lock', iconExtra: 'text-slate-400' }) %> <h2>Change password</h2>
+    <% } %>
+  </div>
+  <div class="card-body">
+    <% if (managedByEnv) { %>
+      <p class="text-sm text-slate-500">Signed in as <%= user.email %>.</p>
+    <% } else { %>
+      <p class="mb-4 text-sm text-slate-500">Signed in as <%= user.email %>. Changing your password signs you out on every other device.</p>
+    <% } %>
+    <%- include('../partials/notices', { notices: pageNotices }) %>
+    <% if (!managedByEnv) { %>
+      <form action="<%= paths.accountPassword %>" method="post">
+        <%- include('../partials/csrf-field') %>
+        <div class="mb-3.5">
+          <label for="current" class="field-label">Current password</label>
+          <input id="current" name="current" type="password" autocomplete="current-password" required class="field-input" />
+        </div>
+        <%- include('../partials/new-password-field', { name: 'next', label: 'New password' }) %>
+        <button type="submit" class="btn btn-primary">Change password</button>
+      </form>
+    <% } %>
+  </div>
+</div>

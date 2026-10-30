@@ -1,0 +1,9 @@
+<%#
+  Emits the page's classic script tags, all from /js (no inline scripts, CSP).
+  Included by layouts/shell.ejs and layouts/public.ejs.
+  Locals:
+    scripts: optional string[] of classic script names (files under public/js, without extension)
+    pathTo: app.locals (config/urls.js PATH_TO), for the asset paths
+-%>
+<% (locals.scripts ?? []).forEach(function (name) { %>
+<script src="<%= pathTo.asset(`js/${name}.js`) %>"></script><% }); %>

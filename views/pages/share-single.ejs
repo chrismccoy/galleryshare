@@ -1,0 +1,22 @@
+<%#
+  A shared gallery with one image or none (public layout, wide variant). One image: its web copy embedded
+  with its title and caption; clicking it opens the web copy in a new tab. No grid, no lightbox script.
+  None: the empty message.
+  Rendered by GET /s/:token (routes/pages/share.js). Shows nothing about the owner.
+  Locals:
+    title, meta: page chrome (meta carries the generic title and Open Graph title)
+    gallery, zipUrl: for partials/share-header.ejs
+    theme: the share theme key; the image is wrapped by partials/share-themes/<shareThemePartial(theme)>.ejs
+    count: the photo count text the themes show ('1 photo'), or null for an empty gallery
+    image: { title, caption, webUrl } (routes/view/share-view.js toShareImage), or null for an empty gallery
+    emptyMessage: shown when image is null
+-%>
+<% let body; %>
+<% if (image) { %>
+  <% body = include('../partials/share-single-image', { single: { image } }); %>
+<% } else { %>
+  <% body = include('../partials/share-empty', { empty: { text: emptyMessage } }); %>
+<% } %>
+<div class="mx-auto max-w-share">
+  <%- include('../partials/share-themes/' + shareThemePartial(theme), { shell: { theme, gallery, zipUrl, count, body } }) %>
+</div>

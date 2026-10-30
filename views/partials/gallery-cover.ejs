@@ -1,0 +1,12 @@
+<%#
+  A gallery's cover thumbnail (its first image) or a placeholder icon when it has no images.
+  Included by partials/rows/gallery.ejs, partials/rows/trash.ejs and pages/dashboard.ejs.
+  Locals: pathTo (app locals); cover: { item: { thumbImageId }, size: optional Tailwind size classes (default
+  'h-12 w-12') }, one object so nothing is inherited from the page.
+-%>
+<% const coverSize = cover.size || 'h-12 w-12'; -%>
+<% if (cover.item.thumbImageId) { %>
+  <img src="<%= pathTo.media(cover.item.thumbImageId, 'thumb') %>" alt="" loading="lazy" class="<%= coverSize %> rounded-lg bg-slate-100 object-cover">
+<% } else { %>
+  <span class="grid <%= coverSize %> place-items-center rounded-lg bg-slate-100 text-slate-300"><%- include('icon', { name: 'fa-regular fa-image' }) %></span>
+<% } %>
